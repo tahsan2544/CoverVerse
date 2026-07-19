@@ -101,7 +101,7 @@ function Photo({ src, size = 140, ring }: { src?: string | null; size?: number; 
   );
 }
 
-function InfoRow({ label, value, p, small }: { label: string; value: string; p: Palette; small?: boolean }) {
+function InfoRow({ label, value, p, small }: { label: string; value?: string; p: Palette; small?: boolean }) {
   return (
     <div style={{ display: "flex", padding: small ? "8px 0" : "12px 0", borderBottom: `1px dashed ${p.muted}44` }}>
       <div style={{ width: 180, color: p.muted, fontSize: 14, fontWeight: 500, textTransform: "uppercase", letterSpacing: 1.2 }}>{label}</div>
@@ -144,7 +144,7 @@ function ClassicFrame({ d, p }: L) {
   );
 }
 
-function SubmitBlock({ title, rows, p }: { title: string; rows: [string, string][]; p: Palette }) {
+function SubmitBlock({ title, rows, p }: { title: string; rows: [string, string | undefined][]; p: Palette }) {
   return (
     <div>
       <div style={{ fontSize: 12, letterSpacing: 3, color: p.accent, textTransform: "uppercase", fontWeight: 700, marginBottom: 10 }}>{title}</div>
