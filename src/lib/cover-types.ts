@@ -6,11 +6,11 @@ export type CoverData = {
   studentId: string;
   photoDataUrl?: string | null;
   schoolName: string;
-  teacherName: string;
+  teacherName?: string;
   subject: string;
   assignmentTitle: string;
   submissionDate: string;
-  academicYear: string;
+  academicYear?: string;
   logoDataUrl?: string | null;
 };
 
