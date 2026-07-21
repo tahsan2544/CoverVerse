@@ -16,7 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 import { coverSchema, type CoverForm } from "@/lib/cover-schema";
-import { EMPTY_COVER } from "@/lib/cover-types";
+import { EMPTY_COVER, DEFAULT_QR, DEFAULT_STYLE, FONT_PAIRS, type QRConfig, type StyleConfig } from "@/lib/cover-types";
 import { TEMPLATES } from "@/lib/templates";
 import { PALETTES, getPalette } from "@/lib/palettes";
 import { CoverPreview, A4_H, A4_W } from "@/components/CoverPreview";
@@ -24,6 +24,8 @@ import { TemplateGallery } from "@/components/TemplateGallery";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { COMMON_SCHOOLS } from "@/lib/schools";
 import { downloadPdf, downloadPng } from "@/lib/download";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
 
 import {
   ArrowLeft,
@@ -39,6 +41,9 @@ import {
   Palette as PaletteIcon,
   Check,
   GraduationCap,
+  QrCode,
+  Type,
+  RefreshCw,
 } from "lucide-react";
 import { format } from "date-fns";
 
