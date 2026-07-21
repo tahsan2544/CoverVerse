@@ -1,4 +1,4 @@
-import type { TemplateMeta } from "./cover-types";
+import type { StyleCategory, TemplateMeta } from "./cover-types";
 import { PALETTES } from "./palettes";
 
 const LAYOUTS: TemplateMeta["layout"][] = [
@@ -27,15 +27,41 @@ const LAYOUT_NAMES: Record<TemplateMeta["layout"], string> = {
   "prism": "Prism",
 };
 
+const LAYOUT_CATEGORIES: Record<TemplateMeta["layout"], StyleCategory[]> = {
+  "classic-frame": ["Formal", "Academic", "Elegant"],
+  "modern-gradient": ["Modern", "Colorful", "Premium"],
+  "minimal-centered": ["Minimal", "Elegant"],
+  "ribbon-top": ["Formal", "Academic", "Modern"],
+  "split-side": ["Modern", "Premium", "Colorful"],
+  "geometric-corner": ["Creative", "Colorful", "Modern"],
+  "watermark-large": ["Elegant", "Premium", "Academic"],
+  "academic-seal": ["Academic", "Formal", "Elegant", "Premium"],
+  "notebook": ["Creative", "Academic", "Minimal"],
+  "prism": ["Creative", "Colorful", "Modern", "Premium"],
+};
+
+// 10 layouts × all palettes = 140+ templates
 export const TEMPLATES: TemplateMeta[] = LAYOUTS.flatMap((layout) =>
-  PALETTES.slice(0, 6).map((palette) => ({
+  PALETTES.map((palette) => ({
     id: `${layout}-${palette.id}`,
     name: `${LAYOUT_NAMES[layout]} · ${palette.name}`,
     layout,
     palette: palette.id,
-    tags: [layout, palette.id],
+    tags: [layout, palette.id, ...LAYOUT_CATEGORIES[layout].map((c) => c.toLowerCase())],
+    categories: LAYOUT_CATEGORIES[layout],
   })),
 );
+
+export const ALL_CATEGORIES: StyleCategory[] = [
+  "Modern",
+  "Minimal",
+  "Colorful",
+  "Formal",
+  "Creative",
+  "Elegant",
+  "Academic",
+  "Premium",
+];
 
 export function getTemplate(id: string) {
   return TEMPLATES.find((t) => t.id === id) ?? TEMPLATES[0];

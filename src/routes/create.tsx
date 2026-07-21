@@ -16,7 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 import { coverSchema, type CoverForm } from "@/lib/cover-schema";
-import { EMPTY_COVER } from "@/lib/cover-types";
+import { EMPTY_COVER, DEFAULT_QR, DEFAULT_STYLE, FONT_PAIRS, type QRConfig, type StyleConfig } from "@/lib/cover-types";
 import { TEMPLATES } from "@/lib/templates";
 import { PALETTES, getPalette } from "@/lib/palettes";
 import { CoverPreview, A4_H, A4_W } from "@/components/CoverPreview";
@@ -24,6 +24,8 @@ import { TemplateGallery } from "@/components/TemplateGallery";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { COMMON_SCHOOLS } from "@/lib/schools";
 import { downloadPdf, downloadPng } from "@/lib/download";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
 
 import {
   ArrowLeft,
@@ -39,6 +41,9 @@ import {
   Palette as PaletteIcon,
   Check,
   GraduationCap,
+  QrCode,
+  Type,
+  RefreshCw,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -53,6 +58,7 @@ export const Route = createFileRoute("/create")({
 });
 
 const STORAGE_KEY = "covercraft:v1";
+const FAV_KEY = "covercraft:favs:v1";
 const MAX_UPLOAD = 10 * 1024 * 1024; // 10 MB
 
 type Persisted = {
@@ -60,6 +66,8 @@ type Persisted = {
   templateId: string;
   paletteId: string;
   customColors: { primary?: string; secondary?: string; accent?: string };
+  qr?: QRConfig;
+  style?: StyleConfig;
 };
 
 function loadPersisted(): Persisted | null {
@@ -78,6 +86,9 @@ function CreatePage() {
   const [customColors, setCustomColors] = useState<{ primary?: string; secondary?: string; accent?: string }>({});
   const [previewLocked, setPreviewLocked] = useState(false);
   const [customSchool, setCustomSchool] = useState(false);
+  const [qr, setQr] = useState<QRConfig>(DEFAULT_QR);
+  const [style, setStyle] = useState<StyleConfig>(DEFAULT_STYLE);
+  const [favorites, setFavorites] = useState<string[]>([]);
   const previewRef = useRef<HTMLDivElement>(null);
 
   const form = useForm<CoverForm>({
@@ -96,10 +107,16 @@ function CreatePage() {
       if (p.templateId) setTemplateId(p.templateId);
       if (p.paletteId) setPaletteId(p.paletteId);
       if (p.customColors) setCustomColors(p.customColors);
+      if (p.qr) setQr({ ...DEFAULT_QR, ...p.qr });
+      if (p.style) setStyle({ ...DEFAULT_STYLE, ...p.style });
       if (p.data.schoolName && !COMMON_SCHOOLS.includes(p.data.schoolName)) {
         setCustomSchool(true);
       }
     }
+    try {
+      const rawFavs = localStorage.getItem(FAV_KEY);
+      if (rawFavs) setFavorites(JSON.parse(rawFavs));
+    } catch { /* ignore */ }
     setMounted(true);
   }, [reset]);
 
@@ -110,12 +127,29 @@ function CreatePage() {
       try {
         localStorage.setItem(
           STORAGE_KEY,
-          JSON.stringify({ data: values, templateId, paletteId, customColors } satisfies Persisted),
+          JSON.stringify({ data: values, templateId, paletteId, customColors, qr, style } satisfies Persisted),
         );
       } catch { /* quota */ }
     }, 400);
     return () => clearTimeout(t);
-  }, [mounted, values, templateId, paletteId, customColors]);
+  }, [mounted, values, templateId, paletteId, customColors, qr, style]);
+
+  useEffect(() => {
+    if (!mounted) return;
+    try { localStorage.setItem(FAV_KEY, JSON.stringify(favorites)); } catch { /* ignore */ }
+  }, [favorites, mounted]);
+
+  function toggleFavorite(id: string) {
+    setFavorites((f) => (f.includes(id) ? f.filter((x) => x !== id) : [...f, id]));
+  }
+
+  function newAssignment() {
+    setValue("assignmentTitle", "", { shouldDirty: true });
+    setValue("subject", "", { shouldDirty: true });
+    setValue("teacherName", "", { shouldDirty: true });
+    setValue("submissionDate", "", { shouldDirty: true });
+    toast.success("New assignment started", { description: "Student info kept — assignment fields cleared." });
+  }
 
   // keep template's palette in sync unless user overrode
   const activeTemplate = useMemo(() => TEMPLATES.find(t => t.id === templateId) ?? TEMPLATES[0], [templateId]);
@@ -178,6 +212,9 @@ function CreatePage() {
             <span className="hidden font-serif text-lg font-bold sm:inline">CoverCraft</span>
           </Link>
           <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={newAssignment} className="hidden sm:inline-flex">
+              <RefreshCw className="mr-1.5 h-4 w-4" /> New assignment
+            </Button>
             <Button variant="ghost" size="sm" asChild><Link to="/"><ArrowLeft className="mr-1 h-4 w-4" /> Home</Link></Button>
             <ThemeToggle />
           </div>
@@ -189,10 +226,11 @@ function CreatePage() {
           {/* LEFT: form + templates */}
           <div>
             <Tabs defaultValue="details" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="details"><Pencil className="mr-1.5 h-4 w-4" /> Details</TabsTrigger>
                 <TabsTrigger value="templates"><Sparkles className="mr-1.5 h-4 w-4" /> Templates</TabsTrigger>
                 <TabsTrigger value="style"><PaletteIcon className="mr-1.5 h-4 w-4" /> Style</TabsTrigger>
+                <TabsTrigger value="qr"><QrCode className="mr-1.5 h-4 w-4" /> QR</TabsTrigger>
               </TabsList>
 
               <TabsContent value="details" className="mt-4">
@@ -276,18 +314,48 @@ function CreatePage() {
               <TabsContent value="templates" className="mt-4">
                 <Card>
                   <CardHeader className="pb-3">
-                    <CardTitle className="font-serif text-lg">Pick a template ({TEMPLATES.length} available)</CardTitle>
+                    <CardTitle className="font-serif text-lg">Pick a template ({TEMPLATES.length}+ available)</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <TemplateGallery data={values} selectedId={templateId} onSelect={setTemplateId} />
+                    <TemplateGallery
+                      data={values}
+                      selectedId={templateId}
+                      onSelect={setTemplateId}
+                      fontId={style.fontId}
+                      qr={qr}
+                      favorites={favorites}
+                      onToggleFavorite={toggleFavorite}
+                    />
                   </CardContent>
                 </Card>
               </TabsContent>
 
               <TabsContent value="style" className="mt-4">
                 <Card>
-                  <CardHeader className="pb-3"><CardTitle className="font-serif text-lg">Color palette</CardTitle></CardHeader>
+                  <CardHeader className="pb-3"><CardTitle className="font-serif text-lg">Colors, fonts &amp; theme</CardTitle></CardHeader>
                   <CardContent className="space-y-6">
+                    <div>
+                      <Label className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-muted-foreground">
+                        <Type className="h-3.5 w-3.5" /> Typography
+                      </Label>
+                      <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                        {FONT_PAIRS.map((f) => {
+                          const active = style.fontId === f.id;
+                          return (
+                            <button
+                              key={f.id}
+                              type="button"
+                              onClick={() => setStyle((s) => ({ ...s, fontId: f.id }))}
+                              className={cn("rounded-lg border-2 p-3 text-left transition-all hover:-translate-y-0.5", active ? "border-accent" : "border-border")}
+                            >
+                              <div style={{ fontFamily: f.heading, fontSize: 20, fontWeight: 700, lineHeight: 1 }}>Aa</div>
+                              <div className="mt-1 truncate text-[11px] text-muted-foreground">{f.name}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    <Separator />
                     <div>
                       <Label className="text-xs uppercase tracking-wider text-muted-foreground">Preset palettes</Label>
                       <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-5">
@@ -338,6 +406,51 @@ function CreatePage() {
                   </CardContent>
                 </Card>
               </TabsContent>
+
+              <TabsContent value="qr" className="mt-4">
+                <Card>
+                  <CardHeader className="pb-3"><CardTitle className="font-serif text-lg">QR code</CardTitle></CardHeader>
+                  <CardContent className="space-y-5">
+                    <div className="flex items-center justify-between rounded-lg border border-border bg-card p-4">
+                      <div>
+                        <div className="font-medium">Show QR code on cover</div>
+                        <p className="text-xs text-muted-foreground">Great for online submission links or a scannable info card.</p>
+                      </div>
+                      <Switch checked={qr.enabled} onCheckedChange={(v) => setQr((q) => ({ ...q, enabled: v }))} />
+                    </div>
+                    <div className={cn("space-y-4 transition-opacity", !qr.enabled && "pointer-events-none opacity-50")}>
+                      <div>
+                        <Label className="text-xs uppercase tracking-wider text-muted-foreground">Contents</Label>
+                        <div className="mt-2 grid grid-cols-2 gap-2">
+                          {(["info", "url"] as const).map((m) => (
+                            <button
+                              key={m}
+                              type="button"
+                              onClick={() => setQr((q) => ({ ...q, mode: m }))}
+                              className={cn("rounded-lg border-2 p-3 text-left transition-all hover:-translate-y-0.5", qr.mode === m ? "border-accent" : "border-border")}
+                            >
+                              <div className="text-sm font-semibold">{m === "info" ? "Assignment info" : "Custom URL"}</div>
+                              <div className="mt-1 text-xs text-muted-foreground">
+                                {m === "info" ? "Student, class, subject, date." : "Any link — submission page, portfolio…"}
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                      {qr.mode === "url" && (
+                        <div>
+                          <Label className="text-xs uppercase tracking-wider text-muted-foreground">URL</Label>
+                          <Input value={qr.url} onChange={(e) => setQr((q) => ({ ...q, url: e.target.value }))} placeholder="https://school.example.com/submit/123" className="mt-1" />
+                        </div>
+                      )}
+                      <div>
+                        <Label className="text-xs uppercase tracking-wider text-muted-foreground">Size · {qr.size}px</Label>
+                        <Slider value={[qr.size]} min={60} max={160} step={4} onValueChange={([v]) => setQr((q) => ({ ...q, size: v }))} className="mt-3" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
             </Tabs>
           </div>
 
@@ -366,7 +479,7 @@ function CreatePage() {
                       </div>
                     )}
                     <div ref={previewRef} className="origin-top-left" style={{ transform: `scale(${scaleFor(460)})`, width: A4_W, height: A4_H }}>
-                      <CoverPreview data={values} templateId={templateId} paletteOverride={paletteOverride as any} />
+                      <CoverPreview data={values} templateId={templateId} paletteOverride={paletteOverride as any} fontId={style.fontId} qr={qr} />
                     </div>
                   </div>
 
