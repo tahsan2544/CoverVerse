@@ -1,5 +1,7 @@
-import { forwardRef } from "react";
-import type { CoverData, Palette, TemplateMeta } from "@/lib/cover-types";
+import { forwardRef, useEffect, useState } from "react";
+import QRCode from "qrcode";
+import type { CoverData, FontPair, Palette, QRConfig, TemplateMeta } from "@/lib/cover-types";
+import { FONT_PAIRS } from "@/lib/cover-types";
 import { getPalette } from "@/lib/palettes";
 import { getTemplate } from "@/lib/templates";
 import { GraduationCap, BookOpen, Award, Sparkles } from "lucide-react";
@@ -11,6 +13,8 @@ type Props = {
   data: CoverData;
   templateId: string;
   paletteOverride?: Partial<Palette>;
+  fontId?: string;
+  qr?: QRConfig;
 };
 
 function useResolved(templateId: string, override?: Partial<Palette>) {
@@ -23,10 +27,11 @@ function useResolved(templateId: string, override?: Partial<Palette>) {
 const F = (v?: string | null, fallback = "—") => (v && v.trim().length ? v : fallback);
 
 export const CoverPreview = forwardRef<HTMLDivElement, Props>(function CoverPreview(
-  { data, templateId, paletteOverride },
+  { data, templateId, paletteOverride, fontId, qr },
   ref,
 ) {
   const { template, palette } = useResolved(templateId, paletteOverride);
+  const font: FontPair = FONT_PAIRS.find((f) => f.id === fontId) ?? FONT_PAIRS[0];
 
   return (
     <div
@@ -37,15 +42,69 @@ export const CoverPreview = forwardRef<HTMLDivElement, Props>(function CoverPrev
         height: A4_H,
         background: palette.bg,
         color: palette.ink,
-        fontFamily: '"Inter", ui-sans-serif, system-ui, sans-serif',
+        fontFamily: font.body,
         position: "relative",
         overflow: "hidden",
+        // CSS variables consumed by the Serif() helper
+        ["--cover-heading" as any]: font.heading,
+        ["--cover-body" as any]: font.body,
       }}
     >
       {renderLayout(template.layout, data, palette)}
+      {qr?.enabled && <QROverlay qr={qr} data={data} palette={palette} />}
     </div>
   );
 });
+
+function QROverlay({ qr, data, palette }: { qr: QRConfig; data: CoverData; palette: Palette }) {
+  const [src, setSrc] = useState<string | null>(null);
+  const payload =
+    qr.mode === "url"
+      ? qr.url || "https://"
+      : [
+          `Student: ${data.studentName}`,
+          `ID: ${data.studentId}`,
+          `Class: ${data.className} · Section: ${data.section} · Roll: ${data.roll}`,
+          `Subject: ${data.subject}`,
+          `Assignment: ${data.assignmentTitle}`,
+          `Submitted: ${data.submissionDate}`,
+          data.teacherName ? `Teacher: ${data.teacherName}` : "",
+          data.schoolName ? `School: ${data.schoolName}` : "",
+        ]
+          .filter(Boolean)
+          .join("\n");
+
+  useEffect(() => {
+    let cancelled = false;
+    QRCode.toDataURL(payload || " ", {
+      margin: 1,
+      width: qr.size * 3,
+      color: { dark: palette.ink, light: "#ffffff" },
+      errorCorrectionLevel: "M",
+    })
+      .then((d) => { if (!cancelled) setSrc(d); })
+      .catch(() => { if (!cancelled) setSrc(null); });
+    return () => { cancelled = true; };
+  }, [payload, qr.size, palette.ink]);
+
+  if (!src) return null;
+  return (
+    <div
+      style={{
+        position: "absolute",
+        right: 30,
+        bottom: 30,
+        padding: 8,
+        background: "white",
+        borderRadius: 8,
+        boxShadow: "0 4px 16px rgba(0,0,0,.15)",
+        zIndex: 20,
+      }}
+    >
+      <img src={src} alt="Cover QR code" width={qr.size} height={qr.size} style={{ display: "block" }} />
+    </div>
+  );
+}
 
 function renderLayout(layout: TemplateMeta["layout"], d: CoverData, p: Palette) {
   switch (layout) {
@@ -111,7 +170,7 @@ function InfoRow({ label, value, p, small }: { label: string; value?: string; p:
 }
 
 function Serif({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
-  return <div style={{ fontFamily: '"Playfair Display", Georgia, serif', ...style }}>{children}</div>;
+  return <div style={{ fontFamily: 'var(--cover-heading, "Playfair Display", Georgia, serif)', ...style }}>{children}</div>;
 }
 
 /* ---------- 1 Classic Frame ---------- */
