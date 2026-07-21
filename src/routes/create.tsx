@@ -58,6 +58,7 @@ export const Route = createFileRoute("/create")({
 });
 
 const STORAGE_KEY = "covercraft:v1";
+const FAV_KEY = "covercraft:favs:v1";
 const MAX_UPLOAD = 10 * 1024 * 1024; // 10 MB
 
 type Persisted = {
@@ -65,6 +66,8 @@ type Persisted = {
   templateId: string;
   paletteId: string;
   customColors: { primary?: string; secondary?: string; accent?: string };
+  qr?: QRConfig;
+  style?: StyleConfig;
 };
 
 function loadPersisted(): Persisted | null {
@@ -83,6 +86,9 @@ function CreatePage() {
   const [customColors, setCustomColors] = useState<{ primary?: string; secondary?: string; accent?: string }>({});
   const [previewLocked, setPreviewLocked] = useState(false);
   const [customSchool, setCustomSchool] = useState(false);
+  const [qr, setQr] = useState<QRConfig>(DEFAULT_QR);
+  const [style, setStyle] = useState<StyleConfig>(DEFAULT_STYLE);
+  const [favorites, setFavorites] = useState<string[]>([]);
   const previewRef = useRef<HTMLDivElement>(null);
 
   const form = useForm<CoverForm>({
@@ -101,10 +107,16 @@ function CreatePage() {
       if (p.templateId) setTemplateId(p.templateId);
       if (p.paletteId) setPaletteId(p.paletteId);
       if (p.customColors) setCustomColors(p.customColors);
+      if (p.qr) setQr({ ...DEFAULT_QR, ...p.qr });
+      if (p.style) setStyle({ ...DEFAULT_STYLE, ...p.style });
       if (p.data.schoolName && !COMMON_SCHOOLS.includes(p.data.schoolName)) {
         setCustomSchool(true);
       }
     }
+    try {
+      const rawFavs = localStorage.getItem(FAV_KEY);
+      if (rawFavs) setFavorites(JSON.parse(rawFavs));
+    } catch { /* ignore */ }
     setMounted(true);
   }, [reset]);
 
@@ -115,12 +127,29 @@ function CreatePage() {
       try {
         localStorage.setItem(
           STORAGE_KEY,
-          JSON.stringify({ data: values, templateId, paletteId, customColors } satisfies Persisted),
+          JSON.stringify({ data: values, templateId, paletteId, customColors, qr, style } satisfies Persisted),
         );
       } catch { /* quota */ }
     }, 400);
     return () => clearTimeout(t);
-  }, [mounted, values, templateId, paletteId, customColors]);
+  }, [mounted, values, templateId, paletteId, customColors, qr, style]);
+
+  useEffect(() => {
+    if (!mounted) return;
+    try { localStorage.setItem(FAV_KEY, JSON.stringify(favorites)); } catch { /* ignore */ }
+  }, [favorites, mounted]);
+
+  function toggleFavorite(id: string) {
+    setFavorites((f) => (f.includes(id) ? f.filter((x) => x !== id) : [...f, id]));
+  }
+
+  function newAssignment() {
+    setValue("assignmentTitle", "", { shouldDirty: true });
+    setValue("subject", "", { shouldDirty: true });
+    setValue("teacherName", "", { shouldDirty: true });
+    setValue("submissionDate", "", { shouldDirty: true });
+    toast.success("New assignment started", { description: "Student info kept — assignment fields cleared." });
+  }
 
   // keep template's palette in sync unless user overrode
   const activeTemplate = useMemo(() => TEMPLATES.find(t => t.id === templateId) ?? TEMPLATES[0], [templateId]);
