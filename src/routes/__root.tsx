@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
+import { registerServiceWorker } from "@/lib/pwa/register";
 
 function NotFoundComponent() {
   return (
@@ -93,9 +94,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Great+Vibes&family=Cormorant+Garamond:wght@400;600;700&family=Cinzel:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" },
+    ],
+    meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
+      { title: "CoverCraft — Beautiful Assignment Cover Pages in Seconds" },
+      { name: "description", content: "Design elegant assignment cover pages with 140+ templates, live preview, and one-click PDF or PNG download. Free, mobile-friendly, and works fully offline." },
+      { name: "author", content: "CoverCraft" },
+      { name: "theme-color", content: "#4c1d95" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+      { name: "apple-mobile-web-app-title", content: "CoverCraft" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { property: "og:title", content: "CoverCraft — Beautiful Assignment Cover Pages" },
+      { property: "og:description", content: "140+ elegant templates. Live preview. High-quality PDF & PNG downloads — fully offline after install." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   shellComponent: RootShell,
@@ -120,6 +139,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    registerServiceWorker();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
