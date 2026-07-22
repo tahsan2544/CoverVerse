@@ -26,6 +26,7 @@ import { COMMON_SCHOOLS } from "@/lib/schools";
 import { downloadPdf, downloadPng } from "@/lib/download";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
+import { PwaControls, OfflineBadge } from "@/components/PwaControls";
 
 import {
   ArrowLeft,
@@ -44,6 +45,7 @@ import {
   QrCode,
   Type,
   RefreshCw,
+  CloudOff,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -215,6 +217,7 @@ function CreatePage() {
             <Button variant="outline" size="sm" onClick={newAssignment} className="hidden sm:inline-flex">
               <RefreshCw className="mr-1.5 h-4 w-4" /> New assignment
             </Button>
+            <div className="hidden sm:block"><OfflineBadge /></div>
             <Button variant="ghost" size="sm" asChild><Link to="/"><ArrowLeft className="mr-1 h-4 w-4" /> Home</Link></Button>
             <ThemeToggle />
           </div>
