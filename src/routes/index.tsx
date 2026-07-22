@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { OfflineBadge as OfflineBadgeSlot } from "@/components/PwaControls";
 import { CoverPreview } from "@/components/CoverPreview";
 import { TEMPLATES } from "@/lib/templates";
 import { EMPTY_COVER } from "@/lib/cover-types";
@@ -58,6 +59,10 @@ function Landing() {
             <span className="font-serif text-xl font-bold tracking-tight">CoverCraft</span>
           </Link>
           <div className="flex items-center gap-2">
+            <div className="hidden sm:block">
+              {/* Shows only when the SW is registered / user is offline */}
+              <OfflineBadgeSlot />
+            </div>
             <ThemeToggle />
             <Button asChild size="sm" className="bg-gradient-hero text-white shadow-glow hover:opacity-95">
               <Link to="/create">Start creating <ArrowRight className="ml-1 h-4 w-4" /></Link>

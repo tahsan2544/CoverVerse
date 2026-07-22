@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Offline · CoverCraft</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" />
+    <style>
+      :root { color-scheme: light dark; }
+      html, body { height: 100%; margin: 0; }
+      body {
+        font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: linear-gradient(160deg, #4c1d95 0%, #1e1b4b 100%);
+        color: #f5f3ff; display: grid; place-items: center; padding: 1.5rem;
+      }
+      .card {
+        max-width: 26rem; width: 100%; text-align: center; padding: 2rem;
+        background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 1rem; backdrop-filter: blur(8px);
+      }
+      h1 { margin: 0 0 .5rem; font-size: 1.25rem; }
+      p { color: #c4b5fd; margin: 0 0 1.5rem; }
+      a, button {
+        display: inline-block; padding: .6rem 1.1rem; border-radius: .5rem;
+        font: inherit; cursor: pointer; text-decoration: none; border: 0;
+        background: #f5f3ff; color: #1e1b4b; font-weight: 600;
+      }
+      .dot { width: 8px; height: 8px; border-radius: 50%; background: #f87171; display: inline-block; margin-right: .4rem; vertical-align: middle; }
+      small { color: #a78bfa; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div><span class="dot"></span><small>You're offline</small></div>
+      <h1 style="margin-top:.5rem">CoverCraft still works</h1>
+      <p>Once installed, every feature — templates, previews, PDF & PNG export — runs on your device. This page appears when a resource hasn't been cached yet.</p>
+      <a href="/">Open CoverCraft</a>
+    </div>
+  </body>
+</html>

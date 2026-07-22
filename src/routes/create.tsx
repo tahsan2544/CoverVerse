@@ -26,6 +26,7 @@ import { COMMON_SCHOOLS } from "@/lib/schools";
 import { downloadPdf, downloadPng } from "@/lib/download";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
+import { PwaControls, OfflineBadge } from "@/components/PwaControls";
 
 import {
   ArrowLeft,
@@ -44,6 +45,7 @@ import {
   QrCode,
   Type,
   RefreshCw,
+  CloudOff,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -215,6 +217,7 @@ function CreatePage() {
             <Button variant="outline" size="sm" onClick={newAssignment} className="hidden sm:inline-flex">
               <RefreshCw className="mr-1.5 h-4 w-4" /> New assignment
             </Button>
+            <div className="hidden sm:block"><OfflineBadge /></div>
             <Button variant="ghost" size="sm" asChild><Link to="/"><ArrowLeft className="mr-1 h-4 w-4" /> Home</Link></Button>
             <ThemeToggle />
           </div>
@@ -226,11 +229,12 @@ function CreatePage() {
           {/* LEFT: form + templates */}
           <div>
             <Tabs defaultValue="details" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
+              <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="details"><Pencil className="mr-1.5 h-4 w-4" /> Details</TabsTrigger>
                 <TabsTrigger value="templates"><Sparkles className="mr-1.5 h-4 w-4" /> Templates</TabsTrigger>
                 <TabsTrigger value="style"><PaletteIcon className="mr-1.5 h-4 w-4" /> Style</TabsTrigger>
                 <TabsTrigger value="qr"><QrCode className="mr-1.5 h-4 w-4" /> QR</TabsTrigger>
+                <TabsTrigger value="offline"><CloudOff className="mr-1.5 h-4 w-4" /> Offline</TabsTrigger>
               </TabsList>
 
               <TabsContent value="details" className="mt-4">
@@ -450,6 +454,10 @@ function CreatePage() {
                     </div>
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              <TabsContent value="offline" className="mt-4">
+                <PwaControls />
               </TabsContent>
             </Tabs>
           </div>
