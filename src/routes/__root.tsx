@@ -77,17 +77,6 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CoverCraft — Beautiful Assignment Cover Pages in Seconds" },
-      { name: "description", content: "Design elegant assignment cover pages with 50+ templates, live preview, and one-click PDF or PNG download. Free, mobile-friendly, and offline-ready." },
-      { name: "author", content: "CoverCraft" },
-      { property: "og:title", content: "CoverCraft — Beautiful Assignment Cover Pages" },
-      { property: "og:description", content: "50+ elegant templates. Live preview. High-quality PDF & PNG downloads." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
     links: [
       {
         rel: "stylesheet",
