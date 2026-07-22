@@ -456,6 +456,7 @@ function CreatePage() {
                 </Card>
               </TabsContent>
             </Tabs>
+            <div className="mt-4" id="offline-tabpanel-anchor" />
           </div>
 
           {/* RIGHT: live preview */}
