@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { OfflineBadge as OfflineBadgeSlot } from "@/components/PwaControls";
 import { CoverPreview } from "@/components/CoverPreview";
 import { TEMPLATES } from "@/lib/templates";
 import { EMPTY_COVER } from "@/lib/cover-types";
