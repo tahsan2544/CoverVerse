@@ -229,11 +229,12 @@ function CreatePage() {
           {/* LEFT: form + templates */}
           <div>
             <Tabs defaultValue="details" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
+              <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="details"><Pencil className="mr-1.5 h-4 w-4" /> Details</TabsTrigger>
                 <TabsTrigger value="templates"><Sparkles className="mr-1.5 h-4 w-4" /> Templates</TabsTrigger>
                 <TabsTrigger value="style"><PaletteIcon className="mr-1.5 h-4 w-4" /> Style</TabsTrigger>
                 <TabsTrigger value="qr"><QrCode className="mr-1.5 h-4 w-4" /> QR</TabsTrigger>
+                <TabsTrigger value="offline"><CloudOff className="mr-1.5 h-4 w-4" /> Offline</TabsTrigger>
               </TabsList>
 
               <TabsContent value="details" className="mt-4">
