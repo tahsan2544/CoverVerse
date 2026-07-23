@@ -28,19 +28,19 @@ const LAYOUT_NAMES: Record<TemplateMeta["layout"], string> = {
 };
 
 const LAYOUT_CATEGORIES: Record<TemplateMeta["layout"], StyleCategory[]> = {
-  "classic-frame": ["Formal", "Academic", "Elegant"],
-  "modern-gradient": ["Modern", "Colorful", "Premium"],
-  "minimal-centered": ["Minimal", "Elegant"],
-  "ribbon-top": ["Formal", "Academic", "Modern"],
-  "split-side": ["Modern", "Premium", "Colorful"],
-  "geometric-corner": ["Creative", "Colorful", "Modern"],
-  "watermark-large": ["Elegant", "Premium", "Academic"],
-  "academic-seal": ["Academic", "Formal", "Elegant", "Premium"],
-  "notebook": ["Creative", "Academic", "Minimal"],
-  "prism": ["Creative", "Colorful", "Modern", "Premium"],
+  "classic-frame": ["Formal", "Academic", "Elegant", "School", "College", "Project Report"],
+  "modern-gradient": ["Modern", "Colorful", "Premium", "College", "University", "Internship Report"],
+  "minimal-centered": ["Minimal", "Elegant", "College", "University", "Thesis", "Project Report"],
+  "ribbon-top": ["Formal", "Academic", "Modern", "School", "Practical File"],
+  "split-side": ["Modern", "Premium", "Colorful", "University", "Internship Report", "Thesis"],
+  "geometric-corner": ["Creative", "Colorful", "Modern", "School", "Science Fair", "Project Report"],
+  "watermark-large": ["Elegant", "Premium", "Academic", "University", "Thesis"],
+  "academic-seal": ["Academic", "Formal", "Elegant", "Premium", "University", "Thesis", "College"],
+  "notebook": ["Creative", "Academic", "Minimal", "School", "Practical File", "Lab Report"],
+  "prism": ["Creative", "Colorful", "Modern", "Premium", "Science Fair", "Lab Report"],
 };
 
-// 10 layouts × all palettes = 140+ templates
+// 10 layouts × 50 palettes = 500 templates
 export const TEMPLATES: TemplateMeta[] = LAYOUTS.flatMap((layout) =>
   PALETTES.map((palette) => ({
     id: `${layout}-${palette.id}`,
@@ -53,6 +53,15 @@ export const TEMPLATES: TemplateMeta[] = LAYOUTS.flatMap((layout) =>
 );
 
 export const ALL_CATEGORIES: StyleCategory[] = [
+  "School",
+  "College",
+  "University",
+  "Science Fair",
+  "Project Report",
+  "Practical File",
+  "Lab Report",
+  "Internship Report",
+  "Thesis",
   "Modern",
   "Minimal",
   "Colorful",
@@ -62,6 +71,40 @@ export const ALL_CATEGORIES: StyleCategory[] = [
   "Academic",
   "Premium",
 ];
+
+/**
+ * Curated "trending" template IDs (hand-picked showcase across layouts + palettes).
+ * The list is stable so users see the same trending set across sessions.
+ */
+export const TRENDING_IDS: string[] = [
+  "modern-gradient-indigo",
+  "academic-seal-navy",
+  "minimal-centered-monochrome",
+  "prism-electric",
+  "watermark-large-champagne",
+  "split-side-onyx",
+  "geometric-corner-coral",
+  "modern-gradient-plum",
+  "classic-frame-crimson",
+  "ribbon-top-emerald",
+  "notebook-sage",
+  "academic-seal-burgundy",
+  "prism-fuchsia",
+  "split-side-cobalt",
+  "watermark-large-ivory",
+  "modern-gradient-electric",
+  "minimal-centered-graphite",
+  "geometric-corner-lime",
+  "academic-seal-champagne",
+  "prism-orchid",
+  "modern-gradient-sunset",
+  "classic-frame-gold",
+  "split-side-amethyst",
+  "watermark-large-coalgold",
+];
+
+/** How many templates are considered "newest" (the tail of the array). */
+export const NEWEST_COUNT = 60;
 
 export function getTemplate(id: string) {
   return TEMPLATES.find((t) => t.id === id) ?? TEMPLATES[0];
