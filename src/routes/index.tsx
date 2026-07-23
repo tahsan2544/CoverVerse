@@ -79,7 +79,7 @@ function Landing() {
         <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-4 py-16 md:grid-cols-2 md:py-24">
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-medium text-accent-foreground">
-              <Sparkles className="h-3.5 w-3.5" /> New · 50+ designer templates
+              <Sparkles className="h-3.5 w-3.5" /> New · 500+ designer templates
             </span>
             <h1 className="mt-5 font-serif text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
               Beautiful assignment <span className="bg-gradient-hero bg-clip-text text-transparent">cover pages</span> in seconds.
