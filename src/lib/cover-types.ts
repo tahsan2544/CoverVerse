@@ -6,7 +6,16 @@ export type StyleCategory =
   | "Creative"
   | "Elegant"
   | "Academic"
-  | "Premium";
+  | "Premium"
+  | "School"
+  | "College"
+  | "University"
+  | "Science Fair"
+  | "Project Report"
+  | "Practical File"
+  | "Lab Report"
+  | "Internship Report"
+  | "Thesis";
 
 export type FontPair = {
   id: string;
