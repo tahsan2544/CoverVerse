@@ -39,7 +39,7 @@ const DEMO = {
 };
 
 const FEATURES = [
-  { icon: PaletteIcon, title: "50+ Elegant Templates", body: "Handcrafted layouts in classic, modern, minimal and academic styles." },
+  { icon: PaletteIcon, title: "500+ Elegant Templates", body: "Handcrafted layouts across school, college, thesis, lab report and more — with trending, newest and recently used sections." },
   { icon: Sparkles, title: "Live Preview", body: "See your cover page update instantly as you type." },
   { icon: Download, title: "PDF & PNG Export", body: "Print-ready A4 PDF or high-resolution PNG in one click." },
   { icon: Save, title: "Autosave", body: "Your details are saved locally — pick up right where you left off." },
