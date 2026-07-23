@@ -27,6 +27,7 @@ import { downloadPdf, downloadPng } from "@/lib/download";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { PwaControls, OfflineBadge } from "@/components/PwaControls";
+import { useRecentTemplates } from "@/hooks/use-recent-templates";
 
 import {
   ArrowLeft,
@@ -92,6 +93,7 @@ function CreatePage() {
   const [style, setStyle] = useState<StyleConfig>(DEFAULT_STYLE);
   const [favorites, setFavorites] = useState<string[]>([]);
   const previewRef = useRef<HTMLDivElement>(null);
+  const { recentIds, push: pushRecent } = useRecentTemplates();
 
   const form = useForm<CoverForm>({
     resolver: zodResolver(coverSchema),
@@ -324,11 +326,12 @@ function CreatePage() {
                     <TemplateGallery
                       data={values}
                       selectedId={templateId}
-                      onSelect={setTemplateId}
+                      onSelect={(id) => { setTemplateId(id); pushRecent(id); }}
                       fontId={style.fontId}
                       qr={qr}
                       favorites={favorites}
                       onToggleFavorite={toggleFavorite}
+                      recentIds={recentIds}
                     />
                   </CardContent>
                 </Card>
