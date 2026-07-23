@@ -54,7 +54,7 @@ export const Route = createFileRoute("/create")({
   head: () => ({
     meta: [
       { title: "Create Your Cover Page · CoverCraft" },
-      { name: "description", content: "Design an assignment cover page from 50+ templates with live preview and download." },
+      { name: "description", content: "Design an assignment cover page from 500+ templates with live preview and download." },
     ],
   }),
   component: CreatePage,
