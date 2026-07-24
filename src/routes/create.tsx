@@ -28,6 +28,7 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { PwaControls, OfflineBadge } from "@/components/PwaControls";
 import { useRecentTemplates } from "@/hooks/use-recent-templates";
+import { AiDesignAssistant } from "@/components/AiDesignAssistant";
 
 import {
   ArrowLeft,
@@ -47,6 +48,7 @@ import {
   Type,
   RefreshCw,
   CloudOff,
+  Wand2,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -231,9 +233,10 @@ function CreatePage() {
           {/* LEFT: form + templates */}
           <div>
             <Tabs defaultValue="details" className="w-full">
-              <TabsList className="grid w-full grid-cols-5">
+              <TabsList className="grid w-full grid-cols-6">
                 <TabsTrigger value="details"><Pencil className="mr-1.5 h-4 w-4" /> Details</TabsTrigger>
                 <TabsTrigger value="templates"><Sparkles className="mr-1.5 h-4 w-4" /> Templates</TabsTrigger>
+                <TabsTrigger value="ai"><Wand2 className="mr-1.5 h-4 w-4" /> AI</TabsTrigger>
                 <TabsTrigger value="style"><PaletteIcon className="mr-1.5 h-4 w-4" /> Style</TabsTrigger>
                 <TabsTrigger value="qr"><QrCode className="mr-1.5 h-4 w-4" /> QR</TabsTrigger>
                 <TabsTrigger value="offline"><CloudOff className="mr-1.5 h-4 w-4" /> Offline</TabsTrigger>
@@ -335,6 +338,20 @@ function CreatePage() {
                     />
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              <TabsContent value="ai" className="mt-4">
+                <AiDesignAssistant
+                  data={values}
+                  selectedTemplateId={templateId}
+                  onApply={({ templateId: tid, fontId, paletteId: pid }) => {
+                    setTemplateId(tid);
+                    setPaletteId(pid);
+                    setCustomColors({});
+                    setStyle((s) => ({ ...s, fontId }));
+                    pushRecent(tid);
+                  }}
+                />
               </TabsContent>
 
               <TabsContent value="style" className="mt-4">
