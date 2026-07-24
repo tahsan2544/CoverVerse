@@ -55,13 +55,12 @@ export const recommendCoverDesign = createServerFn({ method: "POST" })
     ].join("\n");
 
     try {
-      const { experimental_output } = await generateText({
+      const { output: out } = await generateText({
         model,
-        experimental_output: Output.object({ schema: OutputSchema }),
+        output: Output.object({ schema: OutputSchema }),
         system,
         prompt,
       });
-      const out = experimental_output;
       const safe = {
         layoutId: data.layoutIds.includes(out.layoutId) ? out.layoutId : data.layoutIds[0],
         paletteId: data.paletteIds.includes(out.paletteId) ? out.paletteId : data.paletteIds[0],
