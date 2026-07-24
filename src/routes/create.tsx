@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTheme } from "next-themes";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -29,6 +30,11 @@ import { Slider } from "@/components/ui/slider";
 import { PwaControls, OfflineBadge } from "@/components/PwaControls";
 import { useRecentTemplates } from "@/hooks/use-recent-templates";
 import { AiDesignAssistant } from "@/components/AiDesignAssistant";
+import { LanguageSelector } from "@/components/LanguageSelector";
+import { OnboardingTour, useOnboarding } from "@/components/OnboardingTour";
+import { ShortcutsHelp } from "@/components/ShortcutsHelp";
+import { useShortcuts } from "@/hooks/use-shortcuts";
+import { useI18n } from "@/lib/i18n";
 
 import {
   ArrowLeft,
@@ -49,6 +55,8 @@ import {
   RefreshCw,
   CloudOff,
   Wand2,
+  Keyboard,
+  HelpCircle,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -85,6 +93,10 @@ function loadPersisted(): Persisted | null {
 }
 
 function CreatePage() {
+  const { t } = useI18n();
+  const { theme, setTheme } = useTheme();
+  const onboarding = useOnboarding();
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [templateId, setTemplateId] = useState(TEMPLATES[0].id);
   const [paletteId, setPaletteId] = useState(TEMPLATES[0].palette);
@@ -207,6 +219,16 @@ function CreatePage() {
     );
   }
 
+  useShortcuts({
+    "mod+n": () => newAssignment(),
+    "mod+s": () => onDownload("pdf"),
+    "mod+shift+s": () => onDownload("png"),
+    "mod+p": () => window.print(),
+    "mod+d": () => setTheme(theme === "dark" ? "light" : "dark"),
+    "?": () => setShortcutsOpen(true),
+    "mod+/": () => onboarding.replay(),
+  });
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur">
@@ -217,12 +239,19 @@ function CreatePage() {
             </div>
             <span className="hidden font-serif text-lg font-bold sm:inline">CoverCraft</span>
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <Button variant="outline" size="sm" onClick={newAssignment} className="hidden sm:inline-flex">
-              <RefreshCw className="mr-1.5 h-4 w-4" /> New assignment
+              <RefreshCw className="mr-1.5 h-4 w-4" /> {t("nav.newAssignment")}
             </Button>
-            <div className="hidden sm:block"><OfflineBadge /></div>
-            <Button variant="ghost" size="sm" asChild><Link to="/"><ArrowLeft className="mr-1 h-4 w-4" /> Home</Link></Button>
+            <div className="hidden md:block"><OfflineBadge /></div>
+            <Button variant="ghost" size="icon" onClick={() => setShortcutsOpen(true)} aria-label={t("nav.shortcuts")} className="hidden sm:inline-flex">
+              <Keyboard className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={onboarding.replay} aria-label={t("nav.tour")}>
+              <HelpCircle className="h-4 w-4" />
+            </Button>
+            <LanguageSelector />
+            <Button variant="ghost" size="sm" asChild><Link to="/"><ArrowLeft className="mr-1 h-4 w-4" /> {t("nav.home")}</Link></Button>
             <ThemeToggle />
           </div>
         </div>
@@ -234,12 +263,12 @@ function CreatePage() {
           <div>
             <Tabs defaultValue="details" className="w-full">
               <TabsList className="grid w-full grid-cols-6">
-                <TabsTrigger value="details"><Pencil className="mr-1.5 h-4 w-4" /> Details</TabsTrigger>
-                <TabsTrigger value="templates"><Sparkles className="mr-1.5 h-4 w-4" /> Templates</TabsTrigger>
-                <TabsTrigger value="ai"><Wand2 className="mr-1.5 h-4 w-4" /> AI</TabsTrigger>
-                <TabsTrigger value="style"><PaletteIcon className="mr-1.5 h-4 w-4" /> Style</TabsTrigger>
-                <TabsTrigger value="qr"><QrCode className="mr-1.5 h-4 w-4" /> QR</TabsTrigger>
-                <TabsTrigger value="offline"><CloudOff className="mr-1.5 h-4 w-4" /> Offline</TabsTrigger>
+                <TabsTrigger value="details"><Pencil className="mr-1.5 h-4 w-4" /> {t("tab.details")}</TabsTrigger>
+                <TabsTrigger value="templates"><Sparkles className="mr-1.5 h-4 w-4" /> {t("tab.templates")}</TabsTrigger>
+                <TabsTrigger value="ai"><Wand2 className="mr-1.5 h-4 w-4" /> {t("tab.ai")}</TabsTrigger>
+                <TabsTrigger value="style"><PaletteIcon className="mr-1.5 h-4 w-4" /> {t("tab.style")}</TabsTrigger>
+                <TabsTrigger value="qr"><QrCode className="mr-1.5 h-4 w-4" /> {t("tab.qr")}</TabsTrigger>
+                <TabsTrigger value="offline"><CloudOff className="mr-1.5 h-4 w-4" /> {t("tab.offline")}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="details" className="mt-4">
@@ -486,12 +515,12 @@ function CreatePage() {
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <Card className="overflow-hidden">
               <CardHeader className="flex flex-row items-center justify-between gap-2 border-b bg-gradient-subtle pb-3">
-                <CardTitle className="font-serif text-base">Live preview</CardTitle>
+                <CardTitle className="font-serif text-base">{t("preview.title")}</CardTitle>
                 <div className="flex items-center gap-1.5">
                   {previewLocked ? (
-                    <Button size="sm" variant="ghost" onClick={() => setPreviewLocked(false)}><Pencil className="mr-1 h-4 w-4" /> Edit</Button>
+                    <Button size="sm" variant="ghost" onClick={() => setPreviewLocked(false)}><Pencil className="mr-1 h-4 w-4" /> {t("btn.edit")}</Button>
                   ) : (
-                    <span className="text-xs text-muted-foreground">{requiredReady ? "Ready" : "Fill required fields"}</span>
+                    <span className="text-xs text-muted-foreground">{requiredReady ? t("preview.ready") : t("preview.fill")}</span>
                   )}
                 </div>
               </CardHeader>
@@ -502,7 +531,7 @@ function CreatePage() {
                       <div className="absolute inset-0 z-10 grid place-items-center bg-white/70 p-6 text-center backdrop-blur-sm dark:bg-black/40">
                         <div>
                           <Sparkles className="mx-auto h-6 w-6 text-accent" />
-                          <p className="mt-2 max-w-xs text-sm text-muted-foreground">Complete the required fields to unlock the live preview and download.</p>
+                          <p className="mt-2 max-w-xs text-sm text-muted-foreground">{t("preview.unlock")}</p>
                         </div>
                       </div>
                     )}
@@ -513,22 +542,24 @@ function CreatePage() {
 
                   <div className="mt-4 grid grid-cols-2 gap-2">
                     <Button disabled={!requiredReady} onClick={() => onDownload("pdf")} className="bg-gradient-hero text-white shadow-glow">
-                      <FileText className="mr-1.5 h-4 w-4" /> PDF
+                      <FileText className="mr-1.5 h-4 w-4" /> {t("btn.pdf")}
                     </Button>
                     <Button disabled={!requiredReady} onClick={() => onDownload("png")} variant="secondary">
-                      <FileImage className="mr-1.5 h-4 w-4" /> PNG
+                      <FileImage className="mr-1.5 h-4 w-4" /> {t("btn.png")}
                     </Button>
                     <Button disabled={!requiredReady} onClick={() => window.print()} variant="outline" className="col-span-2">
-                      <Printer className="mr-1.5 h-4 w-4" /> Print
+                      <Printer className="mr-1.5 h-4 w-4" /> {t("btn.print")}
                     </Button>
                   </div>
-                  <p className="mt-3 text-center text-[11px] text-muted-foreground">Your data autosaves to this browser only.</p>
+                  <p className="mt-3 text-center text-[11px] text-muted-foreground">{t("preview.autosave")}</p>
                 </div>
               </CardContent>
             </Card>
           </aside>
         </div>
       </main>
+      <OnboardingTour open={onboarding.open} onOpenChange={onboarding.setOpen} />
+      <ShortcutsHelp open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { OfflineBadge as OfflineBadgeSlot } from "@/components/PwaControls";
+import { LanguageSelector } from "@/components/LanguageSelector";
 import { CoverPreview } from "@/components/CoverPreview";
 import { TEMPLATES } from "@/lib/templates";
 import { EMPTY_COVER } from "@/lib/cover-types";
@@ -63,6 +64,7 @@ function Landing() {
               {/* Shows only when the SW is registered / user is offline */}
               <OfflineBadgeSlot />
             </div>
+            <LanguageSelector />
             <ThemeToggle />
             <Button asChild size="sm" className="bg-gradient-hero text-white shadow-glow hover:opacity-95">
               <Link to="/create">Start creating <ArrowRight className="ml-1 h-4 w-4" /></Link>
