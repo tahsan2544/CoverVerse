@@ -255,6 +255,9 @@ function CreatePage() {
             </Button>
             <LanguageSelector />
             <Button variant="ghost" size="sm" asChild><Link to="/"><ArrowLeft className="mr-1 h-4 w-4" /> {t("nav.home")}</Link></Button>
+            <Button variant="ghost" size="icon" asChild aria-label="Insights">
+              <Link to="/dashboard"><BarChart3 className="h-4 w-4" /></Link>
+            </Button>
             <ThemeToggle />
           </div>
         </div>
