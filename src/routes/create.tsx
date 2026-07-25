@@ -58,6 +58,7 @@ import {
   Wand2,
   Keyboard,
   HelpCircle,
+  BarChart3,
 } from "lucide-react";
 import { format } from "date-fns";
 
