@@ -1,4 +1,5 @@
 import type { CoverData } from "./cover-types";
+import { trackEvent } from "./analytics";
 
 export async function captureCanvas(node: HTMLElement) {
   const html2canvas = (await import("html2canvas-pro")).default;
@@ -15,16 +16,17 @@ function safeFile(data: CoverData) {
   return `${base || "cover"}_${data.studentName?.replace(/[^\w\-]+/g, "_").slice(0, 30) || "student"}`;
 }
 
-export async function downloadPng(node: HTMLElement, data: CoverData) {
+export async function downloadPng(node: HTMLElement, data: CoverData, templateId?: string) {
   const canvas = await captureCanvas(node);
   const url = canvas.toDataURL("image/png");
   const a = document.createElement("a");
   a.href = url;
   a.download = `${safeFile(data)}.png`;
   a.click();
+  trackEvent({ type: "download", format: "png", templateId });
 }
 
-export async function downloadPdf(node: HTMLElement, data: CoverData) {
+export async function downloadPdf(node: HTMLElement, data: CoverData, templateId?: string) {
   const canvas = await captureCanvas(node);
   const imgData = canvas.toDataURL("image/jpeg", 0.95);
   const { jsPDF } = await import("jspdf");
@@ -33,4 +35,5 @@ export async function downloadPdf(node: HTMLElement, data: CoverData) {
   const h = pdf.internal.pageSize.getHeight();
   pdf.addImage(imgData, "JPEG", 0, 0, w, h);
   pdf.save(`${safeFile(data)}.pdf`);
+  trackEvent({ type: "download", format: "pdf", templateId });
 }

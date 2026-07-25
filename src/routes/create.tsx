@@ -25,6 +25,7 @@ import { TemplateGallery } from "@/components/TemplateGallery";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { COMMON_SCHOOLS } from "@/lib/schools";
 import { downloadPdf, downloadPng } from "@/lib/download";
+import { trackEvent } from "@/lib/analytics";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { PwaControls, OfflineBadge } from "@/components/PwaControls";
@@ -57,6 +58,7 @@ import {
   Wand2,
   Keyboard,
   HelpCircle,
+  BarChart3,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -166,6 +168,7 @@ function CreatePage() {
     setValue("subject", "", { shouldDirty: true });
     setValue("teacherName", "", { shouldDirty: true });
     setValue("submissionDate", "", { shouldDirty: true });
+    trackEvent({ type: "new_assignment" });
     toast.success("New assignment started", { description: "Student info kept — assignment fields cleared." });
   }
 
@@ -210,7 +213,7 @@ function CreatePage() {
     if (!ok) { toast.error("Please complete required fields"); return; }
     if (!previewRef.current) return;
     toast.promise(
-      (kind === "pdf" ? downloadPdf : downloadPng)(previewRef.current, values),
+      (kind === "pdf" ? downloadPdf : downloadPng)(previewRef.current, values, templateId),
       {
         loading: `Generating ${kind.toUpperCase()}…`,
         success: `${kind.toUpperCase()} downloaded`,
@@ -252,6 +255,9 @@ function CreatePage() {
             </Button>
             <LanguageSelector />
             <Button variant="ghost" size="sm" asChild><Link to="/"><ArrowLeft className="mr-1 h-4 w-4" /> {t("nav.home")}</Link></Button>
+            <Button variant="ghost" size="icon" asChild aria-label="Insights">
+              <Link to="/dashboard"><BarChart3 className="h-4 w-4" /></Link>
+            </Button>
             <ThemeToggle />
           </div>
         </div>
@@ -379,6 +385,8 @@ function CreatePage() {
                     setCustomColors({});
                     setStyle((s) => ({ ...s, fontId }));
                     pushRecent(tid);
+                    trackEvent({ type: "ai_suggestion" });
+                    trackEvent({ type: "template_apply", templateId: tid });
                   }}
                 />
               </TabsContent>

@@ -18,6 +18,7 @@ import {
   GraduationCap,
   ShieldCheck,
   Zap,
+  BarChart3,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -66,6 +67,9 @@ function Landing() {
             </div>
             <LanguageSelector />
             <ThemeToggle />
+            <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+              <Link to="/dashboard"><BarChart3 className="mr-1 h-4 w-4" />Insights</Link>
+            </Button>
             <Button asChild size="sm" className="bg-gradient-hero text-white shadow-glow hover:opacity-95">
               <Link to="/create">Start creating <ArrowRight className="ml-1 h-4 w-4" /></Link>
             </Button>
