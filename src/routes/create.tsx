@@ -25,6 +25,7 @@ import { TemplateGallery } from "@/components/TemplateGallery";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { COMMON_SCHOOLS } from "@/lib/schools";
 import { downloadPdf, downloadPng } from "@/lib/download";
+import { trackEvent } from "@/lib/analytics";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { PwaControls, OfflineBadge } from "@/components/PwaControls";
@@ -166,6 +167,7 @@ function CreatePage() {
     setValue("subject", "", { shouldDirty: true });
     setValue("teacherName", "", { shouldDirty: true });
     setValue("submissionDate", "", { shouldDirty: true });
+    trackEvent({ type: "new_assignment" });
     toast.success("New assignment started", { description: "Student info kept — assignment fields cleared." });
   }
 
