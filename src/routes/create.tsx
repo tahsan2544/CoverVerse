@@ -210,7 +210,7 @@ function CreatePage() {
     if (!ok) { toast.error("Please complete required fields"); return; }
     if (!previewRef.current) return;
     toast.promise(
-      (kind === "pdf" ? downloadPdf : downloadPng)(previewRef.current, values),
+      (kind === "pdf" ? downloadPdf : downloadPng)(previewRef.current, values, templateId),
       {
         loading: `Generating ${kind.toUpperCase()}…`,
         success: `${kind.toUpperCase()} downloaded`,
