@@ -36,7 +36,13 @@ function safeWrite(state: AnalyticsState) {
   }
 }
 
-export function trackEvent(ev: Omit<AnalyticsEvent, "ts"> & { ts?: number }) {
+type EventInput =
+  | { type: "download"; format: "pdf" | "png"; templateId?: string; ts?: number }
+  | { type: "template_apply"; templateId: string; ts?: number }
+  | { type: "new_assignment"; ts?: number }
+  | { type: "ai_suggestion"; ts?: number };
+
+export function trackEvent(ev: EventInput) {
   const state = safeRead();
   const event = { ...ev, ts: ev.ts ?? Date.now() } as AnalyticsEvent;
   state.events.push(event);
