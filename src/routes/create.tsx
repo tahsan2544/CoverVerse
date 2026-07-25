@@ -385,6 +385,8 @@ function CreatePage() {
                     setCustomColors({});
                     setStyle((s) => ({ ...s, fontId }));
                     pushRecent(tid);
+                    trackEvent({ type: "ai_suggestion" });
+                    trackEvent({ type: "template_apply", templateId: tid });
                   }}
                 />
               </TabsContent>
