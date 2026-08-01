@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, memo, useEffect, useState } from "react";
 import QRCode from "qrcode";
 import type { CoverData, FontPair, Palette, QRConfig, TemplateMeta } from "@/lib/cover-types";
 import { FONT_PAIRS } from "@/lib/cover-types";
@@ -28,7 +28,7 @@ function useResolved(templateId: string, override?: Partial<Palette>) {
 
 const F = (v?: string | null, fallback = "—") => (v && v.trim().length ? v : fallback);
 
-export const CoverPreview = forwardRef<HTMLDivElement, Props>(function CoverPreview(
+const CoverPreviewInner = forwardRef<HTMLDivElement, Props>(function CoverPreview(
   { data, templateId, paletteOverride, fontId, qr, bgImage, bgOpacity = 0.6 },
   ref,
 ) {
@@ -73,6 +73,10 @@ export const CoverPreview = forwardRef<HTMLDivElement, Props>(function CoverPrev
     </div>
   );
 });
+
+// Rendering an A4 cover is expensive (gallery shows many at once) — skip re-renders
+// when props are unchanged.
+export const CoverPreview = memo(CoverPreviewInner);
 
 function QROverlay({ qr, data, palette }: { qr: QRConfig; data: CoverData; palette: Palette }) {
   const [src, setSrc] = useState<string | null>(null);
