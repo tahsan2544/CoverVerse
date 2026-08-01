@@ -15,6 +15,8 @@ type Props = {
   paletteOverride?: Partial<Palette>;
   fontId?: string;
   qr?: QRConfig;
+  bgImage?: string | null;
+  bgOpacity?: number;
 };
 
 function useResolved(templateId: string, override?: Partial<Palette>) {
@@ -27,7 +29,7 @@ function useResolved(templateId: string, override?: Partial<Palette>) {
 const F = (v?: string | null, fallback = "—") => (v && v.trim().length ? v : fallback);
 
 export const CoverPreview = forwardRef<HTMLDivElement, Props>(function CoverPreview(
-  { data, templateId, paletteOverride, fontId, qr },
+  { data, templateId, paletteOverride, fontId, qr, bgImage, bgOpacity = 0.6 },
   ref,
 ) {
   const { template, palette } = useResolved(templateId, paletteOverride);
@@ -50,6 +52,22 @@ export const CoverPreview = forwardRef<HTMLDivElement, Props>(function CoverPrev
         ["--cover-body" as any]: font.body,
       }}
     >
+      {bgImage && (
+        <img
+          src={bgImage}
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            opacity: bgOpacity,
+            pointerEvents: "none",
+          }}
+        />
+      )}
       {renderLayout(template.layout, data, palette)}
       {qr?.enabled && <QROverlay qr={qr} data={data} palette={palette} />}
     </div>

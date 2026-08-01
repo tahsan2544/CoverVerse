@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CreateRouteImport } from './routes/create'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiAiCoverImageRouteImport } from './routes/api/ai-cover-image'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -28,35 +29,44 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAiCoverImageRoute = ApiAiCoverImageRouteImport.update({
+  id: '/api/ai-cover-image',
+  path: '/api/ai-cover-image',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/create': typeof CreateRoute
   '/dashboard': typeof DashboardRoute
+  '/api/ai-cover-image': typeof ApiAiCoverImageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/create': typeof CreateRoute
   '/dashboard': typeof DashboardRoute
+  '/api/ai-cover-image': typeof ApiAiCoverImageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/create': typeof CreateRoute
   '/dashboard': typeof DashboardRoute
+  '/api/ai-cover-image': typeof ApiAiCoverImageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/create' | '/dashboard'
+  fullPaths: '/' | '/create' | '/dashboard' | '/api/ai-cover-image'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/create' | '/dashboard'
-  id: '__root__' | '/' | '/create' | '/dashboard'
+  to: '/' | '/create' | '/dashboard' | '/api/ai-cover-image'
+  id: '__root__' | '/' | '/create' | '/dashboard' | '/api/ai-cover-image'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CreateRoute: typeof CreateRoute
   DashboardRoute: typeof DashboardRoute
+  ApiAiCoverImageRoute: typeof ApiAiCoverImageRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/ai-cover-image': {
+      id: '/api/ai-cover-image'
+      path: '/api/ai-cover-image'
+      fullPath: '/api/ai-cover-image'
+      preLoaderRoute: typeof ApiAiCoverImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CreateRoute: CreateRoute,
   DashboardRoute: DashboardRoute,
+  ApiAiCoverImageRoute: ApiAiCoverImageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
