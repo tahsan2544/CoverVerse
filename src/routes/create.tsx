@@ -31,6 +31,7 @@ import { Slider } from "@/components/ui/slider";
 import { PwaControls, OfflineBadge } from "@/components/PwaControls";
 import { useRecentTemplates } from "@/hooks/use-recent-templates";
 import { AiDesignAssistant } from "@/components/AiDesignAssistant";
+import { AiCoverArtwork } from "@/components/AiCoverArtwork";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { OnboardingTour, useOnboarding } from "@/components/OnboardingTour";
 import { ShortcutsHelp } from "@/components/ShortcutsHelp";
@@ -73,6 +74,7 @@ export const Route = createFileRoute("/create")({
 });
 
 const STORAGE_KEY = "covercraft:v1";
+const AI_ART_KEY = "covercraft:aiart:v1";
 const FAV_KEY = "covercraft:favs:v1";
 const MAX_UPLOAD = 10 * 1024 * 1024; // 10 MB
 
@@ -108,6 +110,8 @@ function CreatePage() {
   const [qr, setQr] = useState<QRConfig>(DEFAULT_QR);
   const [style, setStyle] = useState<StyleConfig>(DEFAULT_STYLE);
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [aiArt, setAiArt] = useState<string | null>(null);
+  const [aiArtOpacity, setAiArtOpacity] = useState(0.6);
   const previewRef = useRef<HTMLDivElement>(null);
   const { recentIds, push: pushRecent } = useRecentTemplates();
 
@@ -137,6 +141,14 @@ function CreatePage() {
       const rawFavs = localStorage.getItem(FAV_KEY);
       if (rawFavs) setFavorites(JSON.parse(rawFavs));
     } catch { /* ignore */ }
+    try {
+      const rawArt = localStorage.getItem(AI_ART_KEY);
+      if (rawArt) {
+        const art = JSON.parse(rawArt) as { image?: string | null; opacity?: number };
+        if (art.image) setAiArt(art.image);
+        if (typeof art.opacity === "number") setAiArtOpacity(art.opacity);
+      }
+    } catch { /* ignore */ }
     setMounted(true);
   }, [reset]);
 
@@ -158,6 +170,16 @@ function CreatePage() {
     if (!mounted) return;
     try { localStorage.setItem(FAV_KEY, JSON.stringify(favorites)); } catch { /* ignore */ }
   }, [favorites, mounted]);
+
+  // AI artwork is stored separately (data URLs are large) so a quota error can't
+  // wipe the main autosave payload.
+  useEffect(() => {
+    if (!mounted) return;
+    try {
+      if (aiArt) localStorage.setItem(AI_ART_KEY, JSON.stringify({ image: aiArt, opacity: aiArtOpacity }));
+      else localStorage.removeItem(AI_ART_KEY);
+    } catch { /* quota */ }
+  }, [aiArt, aiArtOpacity, mounted]);
 
   function toggleFavorite(id: string) {
     setFavorites((f) => (f.includes(id) ? f.filter((x) => x !== id) : [...f, id]));
@@ -376,6 +398,17 @@ function CreatePage() {
               </TabsContent>
 
               <TabsContent value="ai" className="mt-4">
+                <div className="space-y-4">
+                <AiCoverArtwork
+                  data={values}
+                  bgImage={aiArt}
+                  bgOpacity={aiArtOpacity}
+                  onBgImage={(url) => {
+                    setAiArt(url);
+                    if (url) trackEvent({ type: "ai_suggestion" });
+                  }}
+                  onBgOpacity={setAiArtOpacity}
+                />
                 <AiDesignAssistant
                   data={values}
                   selectedTemplateId={templateId}
@@ -389,6 +422,7 @@ function CreatePage() {
                     trackEvent({ type: "template_apply", templateId: tid });
                   }}
                 />
+                </div>
               </TabsContent>
 
               <TabsContent value="style" className="mt-4">
@@ -544,7 +578,7 @@ function CreatePage() {
                       </div>
                     )}
                     <div ref={previewRef} className="origin-top-left" style={{ transform: `scale(${scaleFor(460)})`, width: A4_W, height: A4_H }}>
-                      <CoverPreview data={values} templateId={templateId} paletteOverride={paletteOverride as any} fontId={style.fontId} qr={qr} />
+                      <CoverPreview data={values} templateId={templateId} paletteOverride={paletteOverride as any} fontId={style.fontId} qr={qr} bgImage={aiArt} bgOpacity={aiArtOpacity} />
                     </div>
                   </div>
 
