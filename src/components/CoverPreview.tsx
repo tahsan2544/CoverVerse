@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, memo, useEffect, useState } from "react";
 import QRCode from "qrcode";
 import type { CoverData, FontPair, Palette, QRConfig, TemplateMeta } from "@/lib/cover-types";
 import { FONT_PAIRS } from "@/lib/cover-types";
@@ -15,6 +15,8 @@ type Props = {
   paletteOverride?: Partial<Palette>;
   fontId?: string;
   qr?: QRConfig;
+  bgImage?: string | null;
+  bgOpacity?: number;
 };
 
 function useResolved(templateId: string, override?: Partial<Palette>) {
@@ -26,8 +28,8 @@ function useResolved(templateId: string, override?: Partial<Palette>) {
 
 const F = (v?: string | null, fallback = "—") => (v && v.trim().length ? v : fallback);
 
-export const CoverPreview = forwardRef<HTMLDivElement, Props>(function CoverPreview(
-  { data, templateId, paletteOverride, fontId, qr },
+const CoverPreviewInner = forwardRef<HTMLDivElement, Props>(function CoverPreview(
+  { data, templateId, paletteOverride, fontId, qr, bgImage, bgOpacity = 0.6 },
   ref,
 ) {
   const { template, palette } = useResolved(templateId, paletteOverride);
@@ -50,11 +52,31 @@ export const CoverPreview = forwardRef<HTMLDivElement, Props>(function CoverPrev
         ["--cover-body" as any]: font.body,
       }}
     >
+      {bgImage && (
+        <img
+          src={bgImage}
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            opacity: bgOpacity,
+            pointerEvents: "none",
+          }}
+        />
+      )}
       {renderLayout(template.layout, data, palette)}
       {qr?.enabled && <QROverlay qr={qr} data={data} palette={palette} />}
     </div>
   );
 });
+
+// Rendering an A4 cover is expensive (gallery shows many at once) — skip re-renders
+// when props are unchanged.
+export const CoverPreview = memo(CoverPreviewInner);
 
 function QROverlay({ qr, data, palette }: { qr: QRConfig; data: CoverData; palette: Palette }) {
   const [src, setSrc] = useState<string | null>(null);

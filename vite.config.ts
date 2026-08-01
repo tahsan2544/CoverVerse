@@ -20,38 +20,18 @@ export default defineConfig({
         injectRegister: null,
         filename: "sw.js",
         devOptions: { enabled: false },
+        // The manifest is served as a static file from public/manifest.webmanifest so it is
+        // available in dev/preview too (installability needs a reachable manifest).
+        manifest: false,
         includeAssets: [
           "favicon.ico",
           "offline.html",
+          "manifest.webmanifest",
           "apple-touch-icon.png",
           "icon-192.png",
           "icon-512.png",
           "icon-maskable-512.png",
         ],
-        manifest: {
-          name: "CoverCraft — Assignment Cover Pages",
-          short_name: "CoverCraft",
-          description:
-            "Design beautiful assignment cover pages offline. 140+ templates, live preview, PDF & PNG export.",
-          theme_color: "#4c1d95",
-          background_color: "#0f0b1e",
-          display: "standalone",
-          orientation: "portrait",
-          start_url: "/",
-          scope: "/",
-          id: "/",
-          icons: [
-            { src: "/icon-192.png", sizes: "192x192", type: "image/png" },
-            { src: "/icon-512.png", sizes: "512x512", type: "image/png" },
-            {
-              src: "/icon-maskable-512.png",
-              sizes: "512x512",
-              type: "image/png",
-              purpose: "maskable",
-            },
-          ],
-          categories: ["education", "productivity"],
-        },
         workbox: {
           navigateFallback: "/",
           navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],

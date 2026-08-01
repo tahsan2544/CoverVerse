@@ -75,13 +75,17 @@ export function PwaControls() {
 
   const pct = storage && storage.quota ? Math.min(100, (storage.usage / storage.quota) * 100) : 0;
 
+  const inIframe = typeof window !== "undefined" && (() => { try { return window.top !== window.self; } catch { return true; } })();
+
   async function handleInstall() {
     const outcome = await promptInstall();
     if (outcome === "accepted") toast.success("Installing CoverCraft…");
     else if (outcome === "unavailable")
       toast.info("Install unavailable", {
         description:
-          "On iOS: Share → Add to Home Screen. On desktop Chrome/Edge: use the install icon in the address bar.",
+          inIframe
+            ? "Open the app in its own browser tab first, then install it from the browser menu."
+            : "On Android/iOS: browser menu → Add to Home screen. On desktop Chrome/Edge: the install icon in the address bar.",
       });
   }
 
@@ -126,11 +130,18 @@ export function PwaControls() {
             </p>
           </div>
           {!installed && (
-            <Button onClick={handleInstall} disabled={!canInstall} className="bg-gradient-hero text-white shadow-glow">
+            <Button onClick={handleInstall} className="bg-gradient-hero text-white shadow-glow">
               <DownloadIcon className="mr-1.5 h-4 w-4" /> Install app
             </Button>
           )}
         </div>
+
+        {!installed && !canInstall && (
+          <p className="rounded-md border border-amber-500/40 bg-amber-500/5 p-2.5 text-[11px] text-amber-700 dark:text-amber-300">
+            Installing works on the live site in a normal browser tab (not inside an editor preview).
+            Android/iOS: browser menu → “Add to Home screen”. Desktop Chrome/Edge: install icon in the address bar.
+          </p>
+        )}
 
         <Separator />
 
