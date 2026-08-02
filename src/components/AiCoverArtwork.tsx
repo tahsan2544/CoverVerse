@@ -8,6 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import type { CoverForm } from "@/lib/cover-schema";
+import { supabase } from "@/integrations/supabase/client";
+import { useSiteSettings } from "@/hooks/use-site-settings";
+import { useAuth } from "@/hooks/use-auth";
+import { Link } from "@tanstack/react-router";
 
 type Props = {
   data: CoverForm;
@@ -22,12 +26,34 @@ type ApiResult = {
   imageDataUrl: string;
   provider: string;
   mood?: string;
+  remaining?: number;
 };
+
+const CLIENT_KEY_STORAGE = "covercraft:client:v1";
+
+function clientKey(): string {
+  if (typeof window === "undefined") return "";
+  try {
+    let key = localStorage.getItem(CLIENT_KEY_STORAGE);
+    if (!key) {
+      key = crypto.randomUUID();
+      localStorage.setItem(CLIENT_KEY_STORAGE, key);
+    }
+    return key;
+  } catch {
+    return "";
+  }
+}
 
 export function AiCoverArtwork({ data, bgImage, bgOpacity, onBgImage, onBgOpacity }: Props) {
   const [prompt, setPrompt] = useState("");
   const [busy, setBusy] = useState(false);
   const [used, setUsed] = useState<string | null>(null);
+  const [remaining, setRemaining] = useState<number | null>(null);
+  const { settings } = useSiteSettings();
+  const { user } = useAuth();
+  const aiOff = settings ? !settings.ai_enabled : false;
+  const dailyLimit = settings ? (user ? settings.ai_daily_limit_user : settings.ai_daily_limit_guest) : null;
 
   async function generate() {
     if (!data.assignmentTitle?.trim() || !data.subject?.trim()) {
@@ -36,15 +62,21 @@ export function AiCoverArtwork({ data, bgImage, bgOpacity, onBgImage, onBgOpacit
     }
     setBusy(true);
     try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
       const res = await fetch("/api/ai-cover-image", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           assignmentTitle: data.assignmentTitle,
           subject: data.subject,
           className: data.className ?? "",
           schoolName: data.schoolName ?? "",
           stylePreference: prompt,
+          clientKey: clientKey(),
         }),
       });
 
@@ -55,6 +87,7 @@ export function AiCoverArtwork({ data, bgImage, bgOpacity, onBgImage, onBgOpacit
 
       onBgImage(payload.imageDataUrl);
       setUsed(payload.imagePrompt);
+      if (typeof payload.remaining === "number") setRemaining(payload.remaining);
       toast.success("AI artwork applied to your cover");
     } catch (error) {
       toast.error("Couldn't generate artwork", {
@@ -91,10 +124,16 @@ export function AiCoverArtwork({ data, bgImage, bgOpacity, onBgImage, onBgOpacit
           </p>
         </div>
 
+        {aiOff && (
+          <p className="rounded-md border border-amber-500/40 bg-amber-500/5 p-2.5 text-xs text-amber-700 dark:text-amber-300">
+            AI cover generation is paused right now. Please check back a little later.
+          </p>
+        )}
+
         <Button
           type="button"
           onClick={generate}
-          disabled={busy}
+          disabled={busy || aiOff}
           className="w-full bg-gradient-hero text-white shadow-glow"
         >
           {busy ? (
@@ -103,6 +142,23 @@ export function AiCoverArtwork({ data, bgImage, bgOpacity, onBgImage, onBgOpacit
             <><Wand2 className="mr-1.5 h-4 w-4" /> Generate cover with AI</>
           )}
         </Button>
+
+        <p className="text-center text-[11px] text-muted-foreground">
+          {remaining !== null
+            ? `${remaining} more AI cover${remaining === 1 ? "" : "s"} available today.`
+            : dailyLimit !== null
+              ? `Up to ${dailyLimit} AI covers per day${user ? "" : " for guests"}.`
+              : null}
+          {!user && (
+            <>
+              {" "}
+              <Link to="/auth" className="underline underline-offset-2">
+                Sign in
+              </Link>{" "}
+              for a higher daily allowance.
+            </>
+          )}
+        </p>
 
         {busy && (
           <div className="space-y-2">

@@ -7,6 +7,7 @@ const BodySchema = z.object({
   className: z.string().trim().max(60).optional().default(""),
   schoolName: z.string().trim().max(160).optional().default(""),
   stylePreference: z.string().trim().max(400).optional().default(""),
+  clientKey: z.string().trim().max(80).optional().default(""),
 });
 
 export const Route = createFileRoute("/api/ai-cover-image")({
@@ -28,15 +29,34 @@ export const Route = createFileRoute("/api/ai-cover-image")({
           );
         }
 
+        const { checkAiQuota, logAiGeneration } = await import("@/lib/ai-limits.server");
+        const gate = await checkAiQuota(request, parsed.data.clientKey);
+        if (!gate.allowed) {
+          return Response.json({ error: gate.message }, { status: gate.status });
+        }
+
         try {
           const { generateCoverArtwork } = await import("@/lib/ai-cover.server");
           const result = await generateCoverArtwork(parsed.data);
-          return Response.json(result, {
+          await logAiGeneration({
+            userId: gate.userId,
+            clientKey: gate.clientKey,
+            prompt: result.imagePrompt,
+            provider: result.provider,
+            success: true,
+          });
+          return Response.json({ ...result, remaining: gate.remaining }, {
             headers: { "Cache-Control": "no-store" },
           });
         } catch (error) {
           const message = error instanceof Error ? error.message : "Unexpected error";
           console.error("[api/ai-cover-image]", message);
+          await logAiGeneration({
+            userId: gate.userId,
+            clientKey: gate.clientKey,
+            success: false,
+            error: message,
+          });
           return Response.json(
             { error: message.slice(0, 300) },
             { status: /unavailable|Upstream 5|timed out|abort/i.test(message) ? 503 : 502 },

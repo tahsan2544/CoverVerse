@@ -13,8 +13,9 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
-import { registerServiceWorker } from "@/lib/pwa/register";
 import { I18nProvider } from "@/lib/i18n";
+import { SiteBanner } from "@/components/SiteBanner";
+import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
   return (
@@ -84,7 +85,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
-      { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
@@ -94,15 +94,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: "CoverCraft — Beautiful Assignment Cover Pages in Seconds" },
-      { name: "description", content: "Design elegant assignment cover pages with 500+ templates, live preview, and one-click PDF or PNG download. Free, mobile-friendly, and works fully offline." },
+      { name: "description", content: "Design elegant assignment cover pages with 500+ templates, AI cover artwork, live preview, and one-click PDF or PNG download." },
       { name: "author", content: "CoverCraft" },
       { name: "theme-color", content: "#4c1d95" },
-      { name: "apple-mobile-web-app-capable", content: "yes" },
-      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-      { name: "apple-mobile-web-app-title", content: "CoverCraft" },
-      { name: "mobile-web-app-capable", content: "yes" },
       { property: "og:title", content: "CoverCraft — Beautiful Assignment Cover Pages" },
-      { property: "og:description", content: "500+ elegant templates. Live preview. High-quality PDF & PNG downloads — fully offline after install." },
+      { property: "og:description", content: "500+ elegant templates, AI cover artwork, live preview and high-quality PDF & PNG downloads." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -129,15 +125,22 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
 
   useEffect(() => {
-    registerServiceWorker();
-  }, []);
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      router.invalidate();
+      if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
+    });
+    return () => sub.subscription.unsubscribe();
+  }, [router, queryClient]);
 
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         <I18nProvider>
+          <SiteBanner />
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
           <Toaster richColors position="top-center" />

@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { OfflineBadge as OfflineBadgeSlot } from "@/components/PwaControls";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import { AccountMenu } from "@/components/AccountMenu";
 import { CoverPreview } from "@/components/CoverPreview";
 import { TEMPLATES } from "@/lib/templates";
 import { EMPTY_COVER } from "@/lib/cover-types";
@@ -11,7 +11,7 @@ import {
   Sparkles,
   Palette as PaletteIcon,
   Download,
-  Save,
+  Wand2,
   Moon,
   ImageIcon,
   ArrowRight,
@@ -22,6 +22,16 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "CoverCraft — Assignment Cover Page Maker" },
+      { name: "description", content: "Design assignment cover pages from 500+ templates with AI artwork, live preview and one-click PDF or PNG download." },
+      { property: "og:title", content: "CoverCraft — Assignment Cover Page Maker" },
+      { property: "og:description", content: "500+ templates, AI cover artwork, live preview and print-ready PDF or PNG exports." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Landing,
 });
 
@@ -44,7 +54,7 @@ const FEATURES = [
   { icon: PaletteIcon, title: "500+ Elegant Templates", body: "Handcrafted layouts across school, college, thesis, lab report and more — with trending, newest and recently used sections." },
   { icon: Sparkles, title: "Live Preview", body: "See your cover page update instantly as you type." },
   { icon: Download, title: "PDF & PNG Export", body: "Print-ready A4 PDF or high-resolution PNG in one click." },
-  { icon: Save, title: "Autosave", body: "Your details are saved locally — pick up right where you left off." },
+  { icon: Wand2, title: "AI Cover Artwork", body: "Describe the look you want and get custom, text-free artwork rendered behind any template." },
   { icon: Moon, title: "Dark & Light Mode", body: "Beautiful in either mode. Fully responsive on any device." },
   { icon: ImageIcon, title: "Photo & Logo Upload", body: "Add a student photo and institution logo up to 10 MB." },
 ];
@@ -61,12 +71,9 @@ function Landing() {
             <span className="font-serif text-xl font-bold tracking-tight">CoverCraft</span>
           </Link>
           <div className="flex items-center gap-2">
-            <div className="hidden sm:block">
-              {/* Shows only when the SW is registered / user is offline */}
-              <OfflineBadgeSlot />
-            </div>
             <LanguageSelector />
             <ThemeToggle />
+            <AccountMenu />
             <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
               <Link to="/dashboard"><BarChart3 className="mr-1 h-4 w-4" />Insights</Link>
             </Button>
@@ -98,7 +105,7 @@ function Landing() {
                 <Link to="/create">Create your cover <ArrowRight className="ml-1.5 h-4 w-4" /></Link>
               </Button>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <ShieldCheck className="h-4 w-4 text-accent" /> Free · No sign-up · Works offline
+                <ShieldCheck className="h-4 w-4 text-accent" /> Print-ready A4 · No watermarks
               </div>
             </div>
           </div>
@@ -167,7 +174,7 @@ function Landing() {
           <h2 className="mt-4 font-serif text-3xl font-bold sm:text-4xl">Your next cover page is 60 seconds away.</h2>
           <p className="mx-auto mt-3 max-w-xl text-white/85">Fill in your details, pick a template, and download. That's it.</p>
           <Button asChild size="lg" variant="secondary" className="mt-8 shadow-glow">
-            <Link to="/create">Get started free <ArrowRight className="ml-1.5 h-4 w-4" /></Link>
+            <Link to="/create">Get started <ArrowRight className="ml-1.5 h-4 w-4" /></Link>
           </Button>
         </div>
       </section>
