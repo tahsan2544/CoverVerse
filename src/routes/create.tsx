@@ -28,10 +28,9 @@ import { downloadPdf, downloadPng } from "@/lib/download";
 import { trackEvent } from "@/lib/analytics";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
-import { PwaControls, OfflineBadge } from "@/components/PwaControls";
 import { useRecentTemplates } from "@/hooks/use-recent-templates";
-import { AiDesignAssistant } from "@/components/AiDesignAssistant";
 import { AiCoverArtwork } from "@/components/AiCoverArtwork";
+import { AccountMenu } from "@/components/AccountMenu";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { OnboardingTour, useOnboarding } from "@/components/OnboardingTour";
 import { ShortcutsHelp } from "@/components/ShortcutsHelp";
@@ -55,7 +54,6 @@ import {
   QrCode,
   Type,
   RefreshCw,
-  CloudOff,
   Wand2,
   Keyboard,
   HelpCircle,
@@ -268,7 +266,6 @@ function CreatePage() {
             <Button variant="outline" size="sm" onClick={newAssignment} className="hidden sm:inline-flex">
               <RefreshCw className="mr-1.5 h-4 w-4" /> {t("nav.newAssignment")}
             </Button>
-            <div className="hidden md:block"><OfflineBadge /></div>
             <Button variant="ghost" size="icon" onClick={() => setShortcutsOpen(true)} aria-label={t("nav.shortcuts")} className="hidden sm:inline-flex">
               <Keyboard className="h-4 w-4" />
             </Button>
@@ -280,6 +277,7 @@ function CreatePage() {
             <Button variant="ghost" size="icon" asChild aria-label="Insights">
               <Link to="/dashboard"><BarChart3 className="h-4 w-4" /></Link>
             </Button>
+            <AccountMenu />
             <ThemeToggle />
           </div>
         </div>
@@ -290,13 +288,12 @@ function CreatePage() {
           {/* LEFT: form + templates */}
           <div>
             <Tabs defaultValue="details" className="w-full">
-              <TabsList className="grid w-full grid-cols-6">
+              <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="details"><Pencil className="mr-1.5 h-4 w-4" /> {t("tab.details")}</TabsTrigger>
                 <TabsTrigger value="templates"><Sparkles className="mr-1.5 h-4 w-4" /> {t("tab.templates")}</TabsTrigger>
                 <TabsTrigger value="ai"><Wand2 className="mr-1.5 h-4 w-4" /> {t("tab.ai")}</TabsTrigger>
                 <TabsTrigger value="style"><PaletteIcon className="mr-1.5 h-4 w-4" /> {t("tab.style")}</TabsTrigger>
                 <TabsTrigger value="qr"><QrCode className="mr-1.5 h-4 w-4" /> {t("tab.qr")}</TabsTrigger>
-                <TabsTrigger value="offline"><CloudOff className="mr-1.5 h-4 w-4" /> {t("tab.offline")}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="details" className="mt-4">
@@ -398,7 +395,6 @@ function CreatePage() {
               </TabsContent>
 
               <TabsContent value="ai" className="mt-4">
-                <div className="space-y-4">
                 <AiCoverArtwork
                   data={values}
                   bgImage={aiArt}
@@ -409,20 +405,6 @@ function CreatePage() {
                   }}
                   onBgOpacity={setAiArtOpacity}
                 />
-                <AiDesignAssistant
-                  data={values}
-                  selectedTemplateId={templateId}
-                  onApply={({ templateId: tid, fontId, paletteId: pid }) => {
-                    setTemplateId(tid);
-                    setPaletteId(pid);
-                    setCustomColors({});
-                    setStyle((s) => ({ ...s, fontId }));
-                    pushRecent(tid);
-                    trackEvent({ type: "ai_suggestion" });
-                    trackEvent({ type: "template_apply", templateId: tid });
-                  }}
-                />
-                </div>
               </TabsContent>
 
               <TabsContent value="style" className="mt-4">
@@ -547,9 +529,6 @@ function CreatePage() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="offline" className="mt-4">
-                <PwaControls />
-              </TabsContent>
             </Tabs>
           </div>
 
