@@ -14,16 +14,147 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ai_generations: {
+        Row: {
+          client_key: string | null
+          created_at: string
+          error: string | null
+          id: string
+          prompt: string | null
+          provider: string | null
+          success: boolean
+          user_id: string | null
+        }
+        Insert: {
+          client_key?: string | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          prompt?: string | null
+          provider?: string | null
+          success?: boolean
+          user_id?: string | null
+        }
+        Update: {
+          client_key?: string | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          prompt?: string | null
+          provider?: string | null
+          success?: boolean
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          blocked: boolean
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          last_seen_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          blocked?: boolean
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+          last_seen_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          blocked?: boolean
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          last_seen_at?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          ai_daily_limit_guest: number
+          ai_daily_limit_user: number
+          ai_enabled: boolean
+          announcement: string
+          announcement_enabled: boolean
+          id: boolean
+          maintenance_mode: boolean
+          signups_enabled: boolean
+          site_name: string
+          tagline: string
+          updated_at: string
+        }
+        Insert: {
+          ai_daily_limit_guest?: number
+          ai_daily_limit_user?: number
+          ai_enabled?: boolean
+          announcement?: string
+          announcement_enabled?: boolean
+          id?: boolean
+          maintenance_mode?: boolean
+          signups_enabled?: boolean
+          site_name?: string
+          tagline?: string
+          updated_at?: string
+        }
+        Update: {
+          ai_daily_limit_guest?: number
+          ai_daily_limit_user?: number
+          ai_enabled?: boolean
+          announcement?: string
+          announcement_enabled?: boolean
+          id?: boolean
+          maintenance_mode?: boolean
+          signups_enabled?: boolean
+          site_name?: string
+          tagline?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +281,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
