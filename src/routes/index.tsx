@@ -22,10 +22,6 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
-  component: Landing,
-});
-
-export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "CoverCraft — Assignment Cover Page Maker" },
