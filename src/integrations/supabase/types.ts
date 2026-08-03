@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_artwork: {
+        Row: {
+          created_at: string
+          id: string
+          image: string
+          prompt: string
+          style: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image: string
+          prompt: string
+          style?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image?: string
+          prompt?: string
+          style?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_generations: {
         Row: {
           client_key: string | null
@@ -47,31 +74,204 @@ export type Database = {
         }
         Relationships: []
       }
+      covers: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          is_draft: boolean
+          subject: string | null
+          template_id: string
+          thumbnail: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          id?: string
+          is_draft?: boolean
+          subject?: string | null
+          template_id: string
+          thumbnail?: string | null
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          is_draft?: boolean
+          subject?: string | null
+          template_id?: string
+          thumbnail?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      custom_templates: {
+        Row: {
+          categories: string[]
+          created_at: string
+          created_by: string | null
+          font_id: string | null
+          id: string
+          layout: string
+          name: string
+          orientation: string
+          palette: string
+          published: boolean
+          slug: string
+          tags: string[]
+          updated_at: string
+        }
+        Insert: {
+          categories?: string[]
+          created_at?: string
+          created_by?: string | null
+          font_id?: string | null
+          id?: string
+          layout: string
+          name: string
+          orientation?: string
+          palette: string
+          published?: boolean
+          slug: string
+          tags?: string[]
+          updated_at?: string
+        }
+        Update: {
+          categories?: string[]
+          created_at?: string
+          created_by?: string | null
+          font_id?: string | null
+          id?: string
+          layout?: string
+          name?: string
+          orientation?: string
+          palette?: string
+          published?: boolean
+          slug?: string
+          tags?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      export_history: {
+        Row: {
+          cover_id: string | null
+          created_at: string
+          dpi: number
+          format: string
+          id: string
+          paper: string
+          template_id: string | null
+          title: string | null
+          user_id: string
+        }
+        Insert: {
+          cover_id?: string | null
+          created_at?: string
+          dpi?: number
+          format?: string
+          id?: string
+          paper?: string
+          template_id?: string | null
+          title?: string | null
+          user_id: string
+        }
+        Update: {
+          cover_id?: string | null
+          created_at?: string
+          dpi?: number
+          format?: string
+          id?: string
+          paper?: string
+          template_id?: string | null
+          title?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "export_history_cover_id_fkey"
+            columns: ["cover_id"]
+            isOneToOne: false
+            referencedRelation: "covers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feedback: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          message: string
+          page: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind?: string
+          message: string
+          page?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          message?: string
+          page?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
+          avatar_url: string | null
+          bio: string | null
           blocked: boolean
           created_at: string
           display_name: string | null
           email: string | null
           id: string
+          institution: string | null
           last_seen_at: string | null
           updated_at: string
         }
         Insert: {
+          avatar_url?: string | null
+          bio?: string | null
           blocked?: boolean
           created_at?: string
           display_name?: string | null
           email?: string | null
           id: string
+          institution?: string | null
           last_seen_at?: string | null
           updated_at?: string
         }
         Update: {
+          avatar_url?: string | null
+          bio?: string | null
           blocked?: boolean
           created_at?: string
           display_name?: string | null
           email?: string | null
           id?: string
+          institution?: string | null
           last_seen_at?: string | null
           updated_at?: string
         }
@@ -116,6 +316,60 @@ export type Database = {
           site_name?: string
           tagline?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          accent: string | null
+          created_at: string
+          default_dpi: number
+          default_format: string
+          default_paper: string
+          density: string
+          email_notifications: boolean
+          font_size: string
+          inapp_notifications: boolean
+          language: string
+          sidebar_collapsed: boolean
+          theme: string
+          updated_at: string
+          user_id: string
+          watermark: boolean
+        }
+        Insert: {
+          accent?: string | null
+          created_at?: string
+          default_dpi?: number
+          default_format?: string
+          default_paper?: string
+          density?: string
+          email_notifications?: boolean
+          font_size?: string
+          inapp_notifications?: boolean
+          language?: string
+          sidebar_collapsed?: boolean
+          theme?: string
+          updated_at?: string
+          user_id: string
+          watermark?: boolean
+        }
+        Update: {
+          accent?: string | null
+          created_at?: string
+          default_dpi?: number
+          default_format?: string
+          default_paper?: string
+          density?: string
+          email_notifications?: boolean
+          font_size?: string
+          inapp_notifications?: boolean
+          language?: string
+          sidebar_collapsed?: boolean
+          theme?: string
+          updated_at?: string
+          user_id?: string
+          watermark?: boolean
         }
         Relationships: []
       }
