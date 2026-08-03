@@ -7,10 +7,8 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   PencilRuler,
-  Settings as SettingsIcon,
   Shield,
   Sparkles,
-  User as UserIcon,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
@@ -32,16 +30,14 @@ type NavItem = {
 };
 
 const NAV: NavItem[] = [
+  { to: "/", label: "Home", icon: LayoutTemplate },
   { to: "/create", label: "Create", icon: PencilRuler },
-  { to: "/templates", label: "Templates", icon: LayoutTemplate },
   { to: "/dashboard", label: "Insights", icon: BarChart3 },
-  { to: "/profile", label: "Profile", icon: UserIcon },
-  { to: "/settings", label: "Settings", icon: SettingsIcon },
   { to: "/admin", label: "Admin", icon: Shield, adminOnly: true },
 ];
 
-/** Bottom tab bar shows the 4 most-used destinations on small screens. */
-const MOBILE_TABS = ["/create", "/templates", "/dashboard", "/settings"];
+/** Bottom tab bar shows the most-used destinations on small screens. */
+const MOBILE_TABS = ["/", "/create", "/dashboard", "/admin"];
 
 function useNav() {
   const { isAdmin } = useAuth();
@@ -214,7 +210,7 @@ export function AppShell({
           className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
           aria-label="Quick navigation"
         >
-          <ul className="grid grid-cols-4">
+          <ul className="grid auto-cols-fr grid-flow-col">
             {MOBILE_TABS.map((to) => {
               const item = items.find((n) => n.to === to);
               if (!item) return null;
