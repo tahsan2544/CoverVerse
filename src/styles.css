@@ -183,11 +183,61 @@
     border-color: var(--color-border);
   }
 
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+  }
+  html.dark { color-scheme: dark; }
+
+  /* Font-size preference (Settings → Appearance) */
+  html[data-font-size="small"] { font-size: 15px; }
+  html[data-font-size="medium"] { font-size: 16px; }
+  html[data-font-size="large"] { font-size: 18px; }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    min-height: 100dvh;
+  }
+
+  /* Smooth theme crossfade instead of an instant flip. */
+  html,
+  body,
+  header,
+  aside,
+  nav,
+  main,
+  section,
+  footer,
+  button,
+  input,
+  textarea,
+  select,
+  [class*="bg-card"],
+  [class*="bg-background"],
+  [class*="bg-muted"],
+  [class*="bg-sidebar"],
+  [class*="border-"] {
+    transition:
+      background-color 240ms ease,
+      border-color 240ms ease,
+      color 240ms ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html, body, *, *::before, *::after {
+      transition-duration: 1ms !important;
+      animation-duration: 1ms !important;
+      scroll-behavior: auto;
+    }
+  }
+
+  /* Always-visible keyboard focus ring */
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
   }
 
   .font-serif, .font-display {
