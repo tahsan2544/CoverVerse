@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import { I18nProvider } from "@/lib/i18n";
+import { PrefsProvider } from "@/lib/prefs";
 import { SiteBanner } from "@/components/SiteBanner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -139,12 +140,14 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-        <I18nProvider>
-          <SiteBanner />
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-          <Toaster richColors position="top-center" />
-        </I18nProvider>
+        <PrefsProvider>
+          <I18nProvider>
+            <SiteBanner />
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+            <Toaster richColors position="top-center" />
+          </I18nProvider>
+        </PrefsProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
