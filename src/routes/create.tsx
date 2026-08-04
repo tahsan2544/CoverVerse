@@ -277,6 +277,9 @@ function CreatePage() {
             <Button variant="ghost" size="icon" asChild aria-label="Insights">
               <Link to="/dashboard"><BarChart3 className="h-4 w-4" /></Link>
             </Button>
+            <Button variant="ghost" size="icon" asChild aria-label="Settings">
+              <Link to="/settings"><SettingsIcon className="h-4 w-4" /></Link>
+            </Button>
             <AccountMenu />
             <ThemeToggle />
           </div>
