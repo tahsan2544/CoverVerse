@@ -21,7 +21,7 @@ export const Route = createFileRoute("/settings")({
   }),
   component: SettingsPage,
   errorComponent: RouteError,
-  notFoundComponent: RouteNotFound,
+  notFoundComponent: () => <RouteNotFound />,
 });
 
 const ACCENTS: { label: string; value: string | null }[] = [
