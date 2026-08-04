@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { TEMPLATES, ALL_CATEGORIES, TRENDING_IDS, NEWEST_COUNT } from "@/lib/templates";
 import { CoverPreview } from "./CoverPreview";
 import type { CoverData, QRConfig, StyleCategory } from "@/lib/cover-types";
@@ -30,6 +30,40 @@ const SECTION_META: Array<{ id: Section; label: string; icon: React.ReactNode }>
   { id: "recent", label: "Recently used", icon: <History className="h-3.5 w-3.5" /> },
   { id: "favorites", label: "Favorites", icon: <Heart className="h-3.5 w-3.5" /> },
 ];
+
+const PAGE_SIZE = 40;
+
+/** Renders the (expensive) A4 preview only once the card scrolls near the viewport. */
+function LazyThumb({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || show) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setShow(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setShow(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [show]);
+
+  return (
+    <div ref={ref} className="relative aspect-[794/1123] w-full overflow-hidden bg-white">
+      {show ? children : <div className="h-full w-full animate-pulse bg-muted" />}
+    </div>
+  );
+}
 
 export function TemplateGallery({
   data,
