@@ -19,6 +19,7 @@ import {
   ShieldCheck,
   Zap,
   BarChart3,
+  Settings as SettingsIcon,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
