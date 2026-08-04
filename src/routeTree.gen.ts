@@ -9,14 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CreateRouteImport } from './routes/create'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiAiCoverImageRouteImport } from './routes/api/ai-cover-image'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -46,6 +53,11 @@ const ApiAiCoverImageRoute = ApiAiCoverImageRouteImport.update({
   path: '/api/ai-cover-image',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -57,7 +69,9 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/create': typeof CreateRoute
   '/dashboard': typeof DashboardRoute
+  '/settings': typeof SettingsRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/api/ai-cover-image': typeof ApiAiCoverImageRoute
 }
 export interface FileRoutesByTo {
@@ -65,7 +79,9 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/create': typeof CreateRoute
   '/dashboard': typeof DashboardRoute
+  '/settings': typeof SettingsRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/api/ai-cover-image': typeof ApiAiCoverImageRoute
 }
 export interface FileRoutesById {
@@ -75,7 +91,9 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/create': typeof CreateRoute
   '/dashboard': typeof DashboardRoute
+  '/settings': typeof SettingsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/api/ai-cover-image': typeof ApiAiCoverImageRoute
 }
 export interface FileRouteTypes {
@@ -85,7 +103,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/create'
     | '/dashboard'
+    | '/settings'
     | '/admin'
+    | '/profile'
     | '/api/ai-cover-image'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -93,7 +113,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/create'
     | '/dashboard'
+    | '/settings'
     | '/admin'
+    | '/profile'
     | '/api/ai-cover-image'
   id:
     | '__root__'
@@ -102,7 +124,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/create'
     | '/dashboard'
+    | '/settings'
     | '/_authenticated/admin'
+    | '/_authenticated/profile'
     | '/api/ai-cover-image'
   fileRoutesById: FileRoutesById
 }
@@ -112,11 +136,19 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CreateRoute: typeof CreateRoute
   DashboardRoute: typeof DashboardRoute
+  SettingsRoute: typeof SettingsRoute
   ApiAiCoverImageRoute: typeof ApiAiCoverImageRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -159,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAiCoverImageRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -171,10 +210,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -186,18 +227,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CreateRoute: CreateRoute,
   DashboardRoute: DashboardRoute,
+  SettingsRoute: SettingsRoute,
   ApiAiCoverImageRoute: ApiAiCoverImageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

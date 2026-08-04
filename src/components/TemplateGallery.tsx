@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { TEMPLATES, ALL_CATEGORIES, TRENDING_IDS, NEWEST_COUNT } from "@/lib/templates";
 import { CoverPreview } from "./CoverPreview";
 import type { CoverData, QRConfig, StyleCategory } from "@/lib/cover-types";
@@ -31,6 +31,40 @@ const SECTION_META: Array<{ id: Section; label: string; icon: React.ReactNode }>
   { id: "favorites", label: "Favorites", icon: <Heart className="h-3.5 w-3.5" /> },
 ];
 
+const PAGE_SIZE = 40;
+
+/** Renders the (expensive) A4 preview only once the card scrolls near the viewport. */
+function LazyThumb({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || show) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setShow(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setShow(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [show]);
+
+  return (
+    <div ref={ref} className="relative aspect-[794/1123] w-full overflow-hidden bg-white">
+      {show ? children : <div className="h-full w-full animate-pulse bg-muted" />}
+    </div>
+  );
+}
+
 export function TemplateGallery({
   data,
   selectedId,
@@ -46,6 +80,7 @@ export function TemplateGallery({
   const [category, setCategory] = useState<StyleCategory | "All">("All");
   const [sort, setSort] = useState<SortMode>("default");
   const [previewId, setPreviewId] = useState<string | null>(null);
+  const [limit, setLimit] = useState(PAGE_SIZE);
 
   const sectionSource = useMemo(() => {
     switch (section) {
@@ -87,6 +122,13 @@ export function TemplateGallery({
     else if (sort === "favorites") list = [...list].sort((a, b) => Number(favorites.includes(b.id)) - Number(favorites.includes(a.id)));
     return list;
   }, [sectionSource, query, category, sort, favorites]);
+
+  // Reset paging whenever the result set changes so the user starts at the top.
+  useEffect(() => {
+    setLimit(PAGE_SIZE);
+  }, [section, query, category, sort]);
+
+  const visible = useMemo(() => filtered.slice(0, limit), [filtered, limit]);
 
   const emptyMessage: Record<Section, string> = {
     all: "No templates match. Try a different search or category.",
@@ -192,14 +234,15 @@ export function TemplateGallery({
           {emptyMessage[section]}
         </div>
       ) : (
+        <>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-          {filtered.map((t, i) => {
+          {visible.map((t, i) => {
             const active = t.id === selectedId;
             const fav = favorites.includes(t.id);
             return (
               <div
                 key={t.id}
-                className="animate-in fade-in zoom-in-95"
+                className="relative animate-in fade-in zoom-in-95"
                 style={{ animationDelay: `${Math.min(i, 12) * 25}ms`, animationFillMode: "backwards" }}
               >
                 <button
@@ -211,11 +254,11 @@ export function TemplateGallery({
                   )}
                   aria-pressed={active}
                 >
-                  <div className="relative aspect-[794/1123] w-full overflow-hidden bg-white">
+                  <LazyThumb>
                     <div className="absolute left-0 top-0 origin-top-left" style={{ transform: "scale(0.19)" }}>
                       <CoverPreview data={data} templateId={t.id} fontId={fontId} qr={qr} />
                     </div>
-                  </div>
+                  </LazyThumb>
                   <div className="flex items-center justify-between gap-2 border-t bg-card px-2 py-1.5 text-left">
                     <span className="truncate text-[11px] font-medium text-card-foreground">{t.name}</span>
                     {active && <Check className="h-3.5 w-3.5 shrink-0 text-accent" />}
@@ -247,6 +290,14 @@ export function TemplateGallery({
             );
           })}
         </div>
+        {filtered.length > visible.length && (
+          <div className="flex justify-center pt-2">
+            <Button type="button" variant="outline" onClick={() => setLimit((n) => n + PAGE_SIZE)}>
+              Load more · {filtered.length - visible.length} left
+            </Button>
+          </div>
+        )}
+        </>
       )}
 
       <Dialog open={!!previewId} onOpenChange={(open) => !open && setPreviewId(null)}>

@@ -58,6 +58,7 @@ import {
   Keyboard,
   HelpCircle,
   BarChart3,
+  Settings as SettingsIcon,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -276,6 +277,9 @@ function CreatePage() {
             <Button variant="ghost" size="sm" asChild><Link to="/"><ArrowLeft className="mr-1 h-4 w-4" /> {t("nav.home")}</Link></Button>
             <Button variant="ghost" size="icon" asChild aria-label="Insights">
               <Link to="/dashboard"><BarChart3 className="h-4 w-4" /></Link>
+            </Button>
+            <Button variant="ghost" size="icon" asChild aria-label="Settings">
+              <Link to="/settings"><SettingsIcon className="h-4 w-4" /></Link>
             </Button>
             <AccountMenu />
             <ThemeToggle />
