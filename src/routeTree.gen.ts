@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CreateRouteImport } from './routes/create'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -17,6 +18,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiAiCoverImageRouteImport } from './routes/api/ai-cover-image'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/create': typeof CreateRoute
   '/dashboard': typeof DashboardRoute
+  '/settings': typeof SettingsRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/api/ai-cover-image': typeof ApiAiCoverImageRoute
 }
@@ -65,6 +72,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/create': typeof CreateRoute
   '/dashboard': typeof DashboardRoute
+  '/settings': typeof SettingsRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/api/ai-cover-image': typeof ApiAiCoverImageRoute
 }
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/create': typeof CreateRoute
   '/dashboard': typeof DashboardRoute
+  '/settings': typeof SettingsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/api/ai-cover-image': typeof ApiAiCoverImageRoute
 }
@@ -85,6 +94,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/create'
     | '/dashboard'
+    | '/settings'
     | '/admin'
     | '/api/ai-cover-image'
   fileRoutesByTo: FileRoutesByTo
@@ -93,6 +103,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/create'
     | '/dashboard'
+    | '/settings'
     | '/admin'
     | '/api/ai-cover-image'
   id:
@@ -102,6 +113,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/create'
     | '/dashboard'
+    | '/settings'
     | '/_authenticated/admin'
     | '/api/ai-cover-image'
   fileRoutesById: FileRoutesById
@@ -112,11 +124,19 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CreateRoute: typeof CreateRoute
   DashboardRoute: typeof DashboardRoute
+  SettingsRoute: typeof SettingsRoute
   ApiAiCoverImageRoute: typeof ApiAiCoverImageRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -186,6 +206,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CreateRoute: CreateRoute,
   DashboardRoute: DashboardRoute,
+  SettingsRoute: SettingsRoute,
   ApiAiCoverImageRoute: ApiAiCoverImageRoute,
 }
 export const routeTree = rootRouteImport
