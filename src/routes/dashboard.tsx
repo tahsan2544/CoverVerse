@@ -91,8 +91,8 @@ function DashboardPage() {
   }, []);
 
   const pieData = [
-    { name: "PDF", value: stats.pdf, color: "hsl(var(--primary))" },
-    { name: "PNG", value: stats.png, color: "hsl(var(--accent))" },
+    { name: "PDF", value: stats.pdf, color: "var(--primary)" },
+    { name: "PNG", value: stats.png, color: "var(--accent)" },
   ].filter((s) => s.value > 0);
 
   const totalTop = top.reduce((sum, t) => sum + t.count, 0);
@@ -194,15 +194,15 @@ function DashboardPage() {
                   <YAxis allowDecimals={false} tick={{ fontSize: 11 }} width={32} />
                   <Tooltip
                     contentStyle={{
-                      background: "hsl(var(--popover))",
-                      border: "1px solid hsl(var(--border))",
+                      background: "var(--popover)",
+                      border: "1px solid var(--border)",
                       borderRadius: 8,
                       fontSize: 12,
                     }}
                   />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
-                  <Bar dataKey="pdf" name="PDF" stackId="a" fill="hsl(var(--primary))" radius={[0, 0, 0, 0]} />
-                  <Bar dataKey="png" name="PNG" stackId="a" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="pdf" name="PDF" stackId="a" fill="var(--primary)" radius={[0, 0, 0, 0]} />
+                  <Bar dataKey="png" name="PNG" stackId="a" fill="var(--accent)" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -229,7 +229,7 @@ function DashboardPage() {
                         innerRadius={45}
                         outerRadius={80}
                         paddingAngle={4}
-                        stroke="hsl(var(--background))"
+                        stroke="var(--background)"
                       >
                         {pieData.map((entry) => (
                           <Cell key={entry.name} fill={entry.color} />
@@ -237,8 +237,8 @@ function DashboardPage() {
                       </Pie>
                       <Tooltip
                         contentStyle={{
-                          background: "hsl(var(--popover))",
-                          border: "1px solid hsl(var(--border))",
+                          background: "var(--popover)",
+                          border: "1px solid var(--border)",
                           borderRadius: 8,
                           fontSize: 12,
                         }}
