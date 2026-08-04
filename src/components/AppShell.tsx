@@ -8,6 +8,7 @@ import {
   PanelLeftOpen,
   PencilRuler,
   Shield,
+  Settings,
   Sparkles,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
@@ -33,11 +34,12 @@ const NAV: NavItem[] = [
   { to: "/", label: "Home", icon: LayoutTemplate },
   { to: "/create", label: "Create", icon: PencilRuler },
   { to: "/dashboard", label: "Insights", icon: BarChart3 },
+  { to: "/settings", label: "Settings", icon: Settings },
   { to: "/admin", label: "Admin", icon: Shield, adminOnly: true },
 ];
 
 /** Bottom tab bar shows the most-used destinations on small screens. */
-const MOBILE_TABS = ["/", "/create", "/dashboard", "/admin"];
+const MOBILE_TABS = ["/", "/create", "/dashboard", "/settings"];
 
 function useNav() {
   const { isAdmin } = useAuth();
