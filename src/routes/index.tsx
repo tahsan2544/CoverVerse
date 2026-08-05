@@ -31,6 +31,22 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "500+ templates, AI cover artwork, live preview and print-ready PDF or PNG exports." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:url", content: "https://coververse.lovable.app/" },
+    ],
+    links: [{ rel: "canonical", href: "https://coververse.lovable.app/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          name: "CoverVerse",
+          url: "https://coververse.lovable.app/",
+          applicationCategory: "EducationalApplication",
+          description:
+            "Design assignment cover pages from 500+ templates with AI artwork, live preview and one-click PDF or PNG download.",
+        }),
+      },
     ],
   }),
   component: Landing,
