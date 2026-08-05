@@ -20,7 +20,10 @@ export const Route = createFileRoute("/auth")({
       { property: "og:description", content: "Access your CoverVerse account to design assignment cover pages." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:url", content: "https://coververse.lovable.app/auth" },
+      { name: "robots", content: "noindex" },
     ],
+    links: [{ rel: "canonical", href: "https://coververse.lovable.app/auth" }],
   }),
   component: AuthPage,
 });
