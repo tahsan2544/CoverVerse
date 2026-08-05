@@ -67,7 +67,13 @@ export const Route = createFileRoute("/create")({
     meta: [
       { title: "Create Your Cover Page · CoverVerse" },
       { name: "description", content: "Design an assignment cover page from 500+ templates with live preview and download." },
+      { property: "og:title", content: "Create Your Cover Page · CoverVerse" },
+      { property: "og:description", content: "Pick a template, fill in your assignment details and download a print-ready PDF or PNG." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://coververse.lovable.app/create" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://coververse.lovable.app/create" }],
   }),
   component: CreatePage,
 });
