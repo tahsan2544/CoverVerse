@@ -67,7 +67,10 @@ export const Route = createFileRoute("/dashboard")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { property: "og:url", content: "https://coververse.lovable.app/dashboard" },
+      { name: "robots", content: "noindex" },
     ],
+    links: [{ rel: "canonical", href: "https://coververse.lovable.app/dashboard" }],
   }),
 });
 
