@@ -79,7 +79,7 @@
 
 :root {
   --radius: 0.625rem;
-  /* Original CoverCraft look — warm cream paper, deep indigo ink, gold accent */
+  /* Original CoverVerse look — warm cream paper, deep indigo ink, gold accent */
   --background: oklch(0.985 0.008 85);
   --surface: oklch(1 0 0);
   --surface-2: oklch(0.95 0.015 85);

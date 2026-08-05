@@ -14,10 +14,10 @@ import { lovable } from "@/integrations/lovable";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in · CoverCraft" },
-      { name: "description", content: "Sign in to CoverCraft to sync your cover pages, AI artwork credits and account settings." },
-      { property: "og:title", content: "Sign in · CoverCraft" },
-      { property: "og:description", content: "Access your CoverCraft account to design assignment cover pages." },
+      { title: "Sign in · CoverVerse" },
+      { name: "description", content: "Sign in to CoverVerse to sync your cover pages, AI artwork credits and account settings." },
+      { property: "og:title", content: "Sign in · CoverVerse" },
+      { property: "og:description", content: "Access your CoverVerse account to design assignment cover pages." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -85,7 +85,7 @@ function AuthPage() {
           <div className="grid h-10 w-10 place-items-center rounded-lg bg-gradient-hero text-white shadow-glow">
             <GraduationCap className="h-5 w-5" />
           </div>
-          <span className="font-serif text-2xl font-bold tracking-tight">CoverCraft</span>
+          <span className="font-serif text-2xl font-bold tracking-tight">CoverVerse</span>
         </Link>
 
         <Card className="shadow-elegant">

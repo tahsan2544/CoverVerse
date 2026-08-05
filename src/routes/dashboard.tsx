@@ -54,16 +54,16 @@ export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
   head: () => ({
     meta: [
-      { title: "Insights · CoverCraft — Your Cover Page Activity" },
+      { title: "Insights · CoverVerse — Your Cover Page Activity" },
       {
         name: "description",
         content:
-          "Personal, private insights for your CoverCraft activity: downloads over time, favorite templates, and AI usage — all stored locally on your device.",
+          "Personal, private insights for your CoverVerse activity: downloads over time, favorite templates, and AI usage — all stored locally on your device.",
       },
-      { property: "og:title", content: "CoverCraft Insights" },
+      { property: "og:title", content: "CoverVerse Insights" },
       {
         property: "og:description",
-        content: "A private, local dashboard of your CoverCraft downloads and templates.",
+        content: "A private, local dashboard of your CoverVerse downloads and templates.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -92,7 +92,7 @@ function DashboardPage() {
 
   const pieData = [
     { name: "PDF", value: stats.pdf, color: "var(--primary)" },
-    { name: "PNG", value: stats.png, color: "var(--accent)" },
+    { name: "PNG", value: stats.png, color: "var(--gold)" },
   ].filter((s) => s.value > 0);
 
   const totalTop = top.reduce((sum, t) => sum + t.count, 0);
@@ -127,7 +127,7 @@ function DashboardPage() {
               <div className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-hero text-white shadow-glow">
                 <GraduationCap className="h-5 w-5" />
               </div>
-              <span className="font-serif text-lg font-bold tracking-tight">CoverCraft</span>
+              <span className="font-serif text-lg font-bold tracking-tight">CoverVerse</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -142,11 +142,11 @@ function DashboardPage() {
       <main className="mx-auto max-w-6xl px-4 py-8 md:py-12">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-medium text-accent-foreground">
+            <div className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs font-medium text-gold-foreground">
               <BarChart3 className="h-3.5 w-3.5" /> Private · stored on this device
             </div>
             <h1 className="mt-3 font-serif text-3xl font-bold tracking-tight sm:text-4xl">
-              Your CoverCraft insights
+              Your CoverVerse insights
             </h1>
             <p className="mt-2 max-w-xl text-sm text-muted-foreground">
               A private view of your activity — downloads, popular templates, and AI usage. Nothing
@@ -202,7 +202,7 @@ function DashboardPage() {
                   />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
                   <Bar dataKey="pdf" name="PDF" stackId="a" fill="var(--primary)" radius={[0, 0, 0, 0]} />
-                  <Bar dataKey="png" name="PNG" stackId="a" fill="var(--accent)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="png" name="PNG" stackId="a" fill="var(--gold)" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

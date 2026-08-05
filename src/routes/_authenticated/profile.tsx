@@ -15,10 +15,10 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({
     meta: [
-      { title: "Your profile — CoverCraft" },
-      { name: "description", content: "Update the name, institution and short bio that appear on your CoverCraft account." },
-      { property: "og:title", content: "Your profile — CoverCraft" },
-      { property: "og:description", content: "Manage your CoverCraft account details." },
+      { title: "Your profile — CoverVerse" },
+      { name: "description", content: "Update the name, institution and short bio that appear on your CoverVerse account." },
+      { property: "og:title", content: "Your profile — CoverVerse" },
+      { property: "og:description", content: "Manage your CoverVerse account details." },
     ],
   }),
   component: ProfilePage,

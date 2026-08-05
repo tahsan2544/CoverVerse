@@ -13,9 +13,9 @@ import { usePrefs, type Density, type ExportFormat, type FontSize, type PaperSiz
 export const Route = createFileRoute("/settings")({
   head: () => ({
     meta: [
-      { title: "Settings — CoverCraft" },
-      { name: "description", content: "Choose your theme, text size, layout density and default export options for CoverCraft." },
-      { property: "og:title", content: "Settings — CoverCraft" },
+      { title: "Settings — CoverVerse" },
+      { name: "description", content: "Choose your theme, text size, layout density and default export options for CoverVerse." },
+      { property: "og:title", content: "Settings — CoverVerse" },
       { property: "og:description", content: "Personalise appearance and export defaults for your cover pages." },
     ],
   }),
@@ -136,7 +136,7 @@ function SettingsPage() {
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <Label htmlFor="inapp">In-app messages</Label>
-                  <p className="text-xs text-muted-foreground">Announcements and tips inside CoverCraft.</p>
+                  <p className="text-xs text-muted-foreground">Announcements and tips inside CoverVerse.</p>
                 </div>
                 <Switch
                   id="inapp"

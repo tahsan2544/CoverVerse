@@ -1,4 +1,4 @@
-// Local-only analytics for CoverCraft. All data stored in localStorage —
+// Local-only analytics for CoverVerse. All data stored in localStorage —
 // nothing ever leaves the device. Powers the personal insights dashboard.
 
 const KEY = "covercraft:analytics:v1";
