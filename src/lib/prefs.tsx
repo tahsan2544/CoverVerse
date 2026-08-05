@@ -34,7 +34,7 @@ export type Prefs = {
 };
 
 export const DEFAULT_PREFS: Prefs = {
-  theme: "system",
+  theme: "light",
   accent: null,
   fontSize: "medium",
   density: "comfortable",
