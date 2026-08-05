@@ -1,104 +1,121 @@
 # CoverVerse
 
-> Create Professional Assignment Covers in Seconds.
+> Create professional assignment cover pages in seconds.
 
-CoverVerse is a modern web application that helps students create beautiful, professional assignment cover pages with ease. Choose from hundreds of customizable templates, enter your assignment details, preview the result instantly, and download it in high quality.
+CoverVerse is a modern web app that helps students design beautiful, print-ready
+assignment cover pages. Pick from 500+ templates, fill in your details, watch the
+live preview update, and download a high-quality PDF or PNG.
 
-## ✨ Features
+**Live app:** https://coververse.lovable.app
 
-- 🎨 500+ professionally designed cover page templates
-- 🏫 School, College & University templates
-- 🔍 Search and filter templates by category and style
-- ❤️ Save favourite templates
-- 📝 Live cover page preview
-- 📷 Optional photo upload
-- 🏷️ QR Code generation
-- 🎨 Custom colours, fonts, backgrounds, and borders
-- 🌙 Dark & Light mode
-- 📄 High-quality PDF & PNG downloads
-- 📱 Mobile-friendly responsive design
-- 💾 Auto-save using local storage
-- 🌐 Progressive Web App (PWA)
-- 📶 Works offline after installation
-- ⚡ Fast and lightweight
+## Features
 
-## 📋 Input Fields
+- 500+ template variations (10 layouts x 50 colour palettes)
+- School, college & university friendly designs
+- Search, filter, sort and favourite templates
+- Live A4 preview that updates as you type
+- Optional student photo and institution logo upload (max 10 MB each)
+- AI cover artwork from your own prompt
+- QR code overlay (link or assignment info) that can be hidden
+- Full style control: colours, fonts, borders, backgrounds
+- Dark & light mode (light is the default)
+- High-quality PDF and PNG export, plus print support
+- Autosave of your form data in the browser
+- Multilingual UI: English, Bangla, Hindi, Arabic, Spanish, French
+- Personal insights dashboard and an admin console for site owners
+- Fully responsive, mobile-first design
 
-- Student Name
-- Roll Number
-- Class
-- Section
-- Student ID
-- Assignment Title
-- Subject
-- Teacher Name
-- Submission Date
-- Academic Year
-- School Name
-- School Logo (Optional)
-- Student Photo (Optional)
+## Cover fields
 
-## 🚀 Why CoverVerse?
+Student name, roll number, class, section, student ID, assignment title, subject,
+teacher name, submission date, academic year, institution name, institution logo
+(optional), student photo (optional).
 
-Creating an assignment cover page should take seconds—not hours.
+## How to use
 
-CoverVerse helps students create clean, attractive, and professional-looking cover pages without needing any design skills.
+1. Open the app and click **Create cover**.
+2. Choose a template in the gallery (use search, category filters or favourites).
+3. Fill in the required details — the live preview appears immediately.
+4. Adjust colours, fonts, QR code or AI artwork in the side tabs.
+5. Click **Download PDF** or **Download PNG**, or print directly.
 
-## 🛠️ Built With
+Your form data is saved automatically in this browser, so you can close the tab
+and come back later. Sign in if you want your preferences to follow your account
+across devices.
 
-- TypeScript
-- React
-- Tailwind CSS
-- shadcn/ui
-- Progressive Web App (PWA)
-- Local Storage / IndexedDB
+## Tech stack
 
-## 📱 Installation
+- TanStack Start (React 19) + TanStack Router
+- Vite 7
+- Tailwind CSS v4 + shadcn/ui
+- TanStack Query
+- Lovable Cloud (Postgres, auth, storage, server functions)
+- html2canvas-pro + jsPDF for exports
 
-1. Open the website.
-2. Click **Install App**.
-3. Follow the installation prompt.
-4. Start creating cover pages—even offline.
+## Local setup
 
-## 📂 Downloads
+Requirements: [Bun](https://bun.sh) (or Node 20+) and a Lovable Cloud / Supabase
+backend for auth and admin features.
 
-Export your cover pages as:
+```bash
+git clone <your-repo-url>
+cd coververse
+bun install
+bun run dev          # http://localhost:8080
+```
 
-- PDF
-- PNG
-- JPG
-- SVG
+Create a `.env` file with:
 
-## 🔒 Privacy
+```bash
+VITE_SUPABASE_URL=<your project url>
+VITE_SUPABASE_PUBLISHABLE_KEY=<your publishable key>
+VITE_SUPABASE_PROJECT_ID=<your project id>
+```
 
-Your data belongs to you.
+Server-only secrets (never exposed to the browser) are read from the server
+environment: `LOVABLE_API_KEY` for AI features, plus any provider keys you add.
 
-- No account required
-- No tracking
-- No cloud storage
-- Everything is stored locally on your device
+Useful scripts:
 
-## 🎯 Roadmap
+```bash
+bun run dev      # start the dev server
+bun run build    # production build
+bun run preview  # preview the production build
+```
 
-- AI design recommendations
-- 1000+ templates
-- Multi-language support
+## Accounts & roles
+
+- Anyone can create and download covers without an account.
+- Signing in syncs preferences and profile details.
+- Admins get an **Admin console** for site settings, AI limits and users. Roles
+  live in a dedicated `user_roles` table and are checked server-side.
+
+## Deployment
+
+The app is deployed from Lovable. Frontend changes go live after publishing;
+backend changes deploy immediately. A custom domain can be connected in project
+settings once published.
+
+## Privacy
+
+Cover content, uploads and autosaved form data stay in your browser. Account data
+is limited to your profile and preferences.
+
+## Roadmap
+
+- More templates and layout families
 - Batch cover generation
-- Cloud sync (optional)
 - Community template sharing
+- Optional cloud sync of saved covers
 
-## 🤝 Contributing
+## Contributing
 
-Suggestions, bug reports, and feature requests are always welcome.
+Issues, ideas and pull requests are welcome.
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License.
-
-## 👨‍💻 Developer
-
-Created with ❤️ to help students design professional assignment cover pages quickly and easily.
+MIT
 
 ---
 
-**CoverVerse** — *Create Professional Assignment Covers in Seconds.*
+**CoverVerse** — *Create professional assignment covers in seconds.*
