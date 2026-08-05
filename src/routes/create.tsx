@@ -114,6 +114,7 @@ function CreatePage() {
   const [customSchool, setCustomSchool] = useState(false);
   const [qr, setQr] = useState<QRConfig>(DEFAULT_QR);
   const [style, setStyle] = useState<StyleConfig>(DEFAULT_STYLE);
+  const [fontQuery, setFontQuery] = useState("");
   const [favorites, setFavorites] = useState<string[]>([]);
   const [aiArt, setAiArt] = useState<string | null>(null);
   const [aiArtOpacity, setAiArtOpacity] = useState(0.6);
