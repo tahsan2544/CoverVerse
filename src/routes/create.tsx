@@ -425,8 +425,16 @@ function CreatePage() {
                       <Label className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-muted-foreground">
                         <Type className="h-3.5 w-3.5" /> Typography
                       </Label>
-                      <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                        {FONT_PAIRS.map((f) => {
+                      <Input
+                        value={fontQuery}
+                        onChange={(e) => setFontQuery(e.target.value)}
+                        placeholder={`Search ${FONT_PAIRS.length} font pairings…`}
+                        className="mt-2"
+                      />
+                      <div className="mt-2 grid max-h-80 grid-cols-2 gap-2 overflow-y-auto pr-1 sm:grid-cols-3">
+                        {FONT_PAIRS.filter((f) =>
+                          f.name.toLowerCase().includes(fontQuery.trim().toLowerCase()),
+                        ).map((f) => {
                           const active = style.fontId === f.id;
                           return (
                             <button
