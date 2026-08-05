@@ -14,7 +14,7 @@ export const LANGS: { code: Lang; label: string; native: string; dir: "ltr" | "r
 type Dict = Record<string, string>;
 
 const en: Dict = {
-  "app.name": "CoverCraft",
+  "app.name": "CoverVerse",
   "nav.home": "Home",
   "nav.newAssignment": "New assignment",
   "nav.start": "Start creating",
@@ -36,7 +36,7 @@ const en: Dict = {
   "btn.print": "Print",
   "btn.edit": "Edit",
   "btn.close": "Close",
-  "onboarding.title": "Welcome to CoverCraft",
+  "onboarding.title": "Welcome to CoverVerse",
   "onboarding.subtitle": "A quick tour — 4 steps, 20 seconds.",
   "onboarding.step1.title": "Fill your details",
   "onboarding.step1.body": "Add student, school and assignment info. Everything autosaves to this device.",
@@ -62,7 +62,7 @@ const en: Dict = {
 };
 
 const bn: Dict = {
-  "app.name": "CoverCraft",
+  "app.name": "CoverVerse",
   "nav.home": "হোম",
   "nav.newAssignment": "নতুন অ্যাসাইনমেন্ট",
   "nav.start": "শুরু করুন",
@@ -84,7 +84,7 @@ const bn: Dict = {
   "btn.print": "প্রিন্ট",
   "btn.edit": "এডিট",
   "btn.close": "বন্ধ",
-  "onboarding.title": "CoverCraft-এ স্বাগতম",
+  "onboarding.title": "CoverVerse-এ স্বাগতম",
   "onboarding.subtitle": "৪ ধাপের ছোট্ট গাইড — ২০ সেকেন্ড।",
   "onboarding.step1.title": "তথ্য দিন",
   "onboarding.step1.body": "ছাত্র, স্কুল ও অ্যাসাইনমেন্টের তথ্য দিন। সব কিছু ডিভাইসে অটোসেভ হয়।",
@@ -110,7 +110,7 @@ const bn: Dict = {
 };
 
 const hi: Dict = {
-  "app.name": "CoverCraft",
+  "app.name": "CoverVerse",
   "nav.home": "होम",
   "nav.newAssignment": "नई असाइनमेंट",
   "nav.start": "शुरू करें",
@@ -132,7 +132,7 @@ const hi: Dict = {
   "btn.print": "प्रिंट",
   "btn.edit": "एडिट",
   "btn.close": "बंद",
-  "onboarding.title": "CoverCraft में स्वागत है",
+  "onboarding.title": "CoverVerse में स्वागत है",
   "onboarding.subtitle": "4 चरण, 20 सेकंड।",
   "onboarding.step1.title": "विवरण भरें",
   "onboarding.step1.body": "छात्र, स्कूल और असाइनमेंट की जानकारी दें — सब ऑटोसेव होता है।",
@@ -158,7 +158,7 @@ const hi: Dict = {
 };
 
 const ar: Dict = {
-  "app.name": "CoverCraft",
+  "app.name": "CoverVerse",
   "nav.home": "الرئيسية",
   "nav.newAssignment": "واجب جديد",
   "nav.start": "ابدأ الآن",
@@ -180,7 +180,7 @@ const ar: Dict = {
   "btn.print": "طباعة",
   "btn.edit": "تعديل",
   "btn.close": "إغلاق",
-  "onboarding.title": "مرحبًا بك في CoverCraft",
+  "onboarding.title": "مرحبًا بك في CoverVerse",
   "onboarding.subtitle": "جولة سريعة من 4 خطوات — 20 ثانية.",
   "onboarding.step1.title": "أدخل بياناتك",
   "onboarding.step1.body": "أضف بيانات الطالب والمدرسة والواجب — يتم الحفظ تلقائيًا.",
@@ -206,7 +206,7 @@ const ar: Dict = {
 };
 
 const es: Dict = {
-  "app.name": "CoverCraft",
+  "app.name": "CoverVerse",
   "nav.home": "Inicio",
   "nav.newAssignment": "Nueva tarea",
   "nav.start": "Empezar",
@@ -228,7 +228,7 @@ const es: Dict = {
   "btn.print": "Imprimir",
   "btn.edit": "Editar",
   "btn.close": "Cerrar",
-  "onboarding.title": "Bienvenido a CoverCraft",
+  "onboarding.title": "Bienvenido a CoverVerse",
   "onboarding.subtitle": "Un tour rápido — 4 pasos, 20 segundos.",
   "onboarding.step1.title": "Rellena tus datos",
   "onboarding.step1.body": "Estudiante, escuela y tarea — todo se guarda automáticamente.",
@@ -254,7 +254,7 @@ const es: Dict = {
 };
 
 const fr: Dict = {
-  "app.name": "CoverCraft",
+  "app.name": "CoverVerse",
   "nav.home": "Accueil",
   "nav.newAssignment": "Nouveau devoir",
   "nav.start": "Commencer",
@@ -276,7 +276,7 @@ const fr: Dict = {
   "btn.print": "Imprimer",
   "btn.edit": "Modifier",
   "btn.close": "Fermer",
-  "onboarding.title": "Bienvenue sur CoverCraft",
+  "onboarding.title": "Bienvenue sur CoverVerse",
   "onboarding.subtitle": "Guide rapide — 4 étapes, 20 secondes.",
   "onboarding.step1.title": "Vos informations",
   "onboarding.step1.body": "Élève, école, devoir — tout est enregistré automatiquement.",

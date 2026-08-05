@@ -68,6 +68,8 @@
   --color-warning-foreground: var(--warning-foreground);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
   --font-display: "Playfair Display", ui-serif, Georgia, serif;
@@ -77,7 +79,7 @@
 
 :root {
   --radius: 0.625rem;
-  /* Original CoverCraft look — warm cream paper, deep indigo ink, gold accent */
+  /* Original CoverVerse look — warm cream paper, deep indigo ink, gold accent */
   --background: oklch(0.985 0.008 85);
   --surface: oklch(1 0 0);
   --surface-2: oklch(0.95 0.015 85);
@@ -93,8 +95,12 @@
   --secondary-foreground: oklch(0.28 0.06 265);
   --muted: oklch(0.95 0.015 85);
   --muted-foreground: oklch(0.5 0.03 260);
-  --accent: oklch(0.78 0.14 75);
-  --accent-foreground: oklch(0.2 0.04 265);
+  /* accent = subtle hover/active surface (shadcn uses it for menu + ghost hovers) */
+  --accent: oklch(0.945 0.018 85);
+  --accent-foreground: oklch(0.22 0.05 265);
+  /* gold = the brand highlight colour */
+  --gold: oklch(0.72 0.14 75);
+  --gold-foreground: oklch(0.2 0.04 265);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
   --success: oklch(0.5 0.13 155);
@@ -144,8 +150,10 @@
   --secondary-foreground: oklch(0.96 0.01 85);
   --muted: oklch(0.24 0.035 265);
   --muted-foreground: oklch(0.7 0.03 260);
-  --accent: oklch(0.78 0.14 75);
-  --accent-foreground: oklch(0.14 0.03 265);
+  --accent: oklch(0.27 0.04 265);
+  --accent-foreground: oklch(0.96 0.01 85);
+  --gold: oklch(0.82 0.14 75);
+  --gold-foreground: oklch(0.14 0.03 265);
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.984 0.003 247.858);
   --success: oklch(0.76 0.16 158);

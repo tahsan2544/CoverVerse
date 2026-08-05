@@ -48,12 +48,12 @@ function useNav() {
 
 function Brand({ collapsed }: { collapsed?: boolean }) {
   return (
-    <Link to="/" className="flex min-w-0 items-center gap-2" aria-label="CoverCraft home">
+    <Link to="/" className="flex min-w-0 items-center gap-2" aria-label="CoverVerse home">
       <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-hero text-white shadow-glow">
         <GraduationCap className="h-5 w-5" />
       </span>
       {!collapsed && (
-        <span className="truncate font-serif text-lg font-bold tracking-tight">CoverCraft</span>
+        <span className="truncate font-serif text-lg font-bold tracking-tight">CoverVerse</span>
       )}
     </Link>
   );

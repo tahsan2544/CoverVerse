@@ -38,10 +38,10 @@ import {
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
     meta: [
-      { title: "Admin console · CoverCraft" },
-      { name: "description", content: "Manage CoverCraft site settings, AI limits and user accounts." },
-      { property: "og:title", content: "Admin console · CoverCraft" },
-      { property: "og:description", content: "Site settings, AI limits and account management for CoverCraft." },
+      { title: "Admin console · CoverVerse" },
+      { name: "description", content: "Manage CoverVerse site settings, AI limits and user accounts." },
+      { property: "og:title", content: "Admin console · CoverVerse" },
+      { property: "og:description", content: "Site settings, AI limits and account management for CoverVerse." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

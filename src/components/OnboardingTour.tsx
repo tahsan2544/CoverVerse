@@ -46,7 +46,7 @@ export function OnboardingTour({ open, onOpenChange }: { open: boolean; onOpenCh
           <p className="mt-1 text-sm text-muted-foreground">{t(`onboarding.${key}.body`)}</p>
           <div className="mt-4 flex gap-1.5">
             {STEPS.map((_, i) => (
-              <span key={i} className={cn("h-1.5 flex-1 rounded-full transition-all", i === idx ? "bg-accent" : i < idx ? "bg-accent/60" : "bg-border")} />
+              <span key={i} className={cn("h-1.5 flex-1 rounded-full transition-all", i === idx ? "bg-gold" : i < idx ? "bg-gold/60" : "bg-border")} />
             ))}
           </div>
         </div>

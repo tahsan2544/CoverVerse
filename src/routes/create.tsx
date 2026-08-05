@@ -65,9 +65,15 @@ import { format } from "date-fns";
 export const Route = createFileRoute("/create")({
   head: () => ({
     meta: [
-      { title: "Create Your Cover Page · CoverCraft" },
+      { title: "Create Your Cover Page · CoverVerse" },
       { name: "description", content: "Design an assignment cover page from 500+ templates with live preview and download." },
+      { property: "og:title", content: "Create Your Cover Page · CoverVerse" },
+      { property: "og:description", content: "Pick a template, fill in your assignment details and download a print-ready PDF or PNG." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://coververse.lovable.app/create" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://coververse.lovable.app/create" }],
   }),
   component: CreatePage,
 });
@@ -261,7 +267,7 @@ function CreatePage() {
             <div className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-hero text-white shadow-glow">
               <GraduationCap className="h-5 w-5" />
             </div>
-            <span className="hidden font-serif text-lg font-bold sm:inline">CoverCraft</span>
+            <span className="hidden font-serif text-lg font-bold sm:inline">CoverVerse</span>
           </Link>
           <div className="flex items-center gap-1 sm:gap-2">
             <Button variant="outline" size="sm" onClick={newAssignment} className="hidden sm:inline-flex">
@@ -427,7 +433,7 @@ function CreatePage() {
                               key={f.id}
                               type="button"
                               onClick={() => setStyle((s) => ({ ...s, fontId: f.id }))}
-                              className={cn("rounded-lg border-2 p-3 text-left transition-all hover:-translate-y-0.5", active ? "border-accent" : "border-border")}
+                              className={cn("rounded-lg border-2 p-3 text-left transition-all hover:-translate-y-0.5", active ? "border-gold" : "border-border")}
                             >
                               <div style={{ fontFamily: f.heading, fontSize: 20, fontWeight: 700, lineHeight: 1 }}>Aa</div>
                               <div className="mt-1 truncate text-[11px] text-muted-foreground">{f.name}</div>
@@ -447,7 +453,7 @@ function CreatePage() {
                               key={p.id}
                               type="button"
                               onClick={() => { setPaletteId(p.id); setCustomColors({}); }}
-                              className={cn("group relative rounded-lg border-2 p-3 text-left transition-all hover:-translate-y-0.5", active ? "border-accent" : "border-border")}
+                              className={cn("group relative rounded-lg border-2 p-3 text-left transition-all hover:-translate-y-0.5", active ? "border-gold" : "border-border")}
                             >
                               <div className="flex gap-1">
                                 <span className="h-6 w-6 rounded" style={{ background: p.primary }} />
@@ -455,7 +461,7 @@ function CreatePage() {
                                 <span className="h-6 w-6 rounded" style={{ background: p.accent }} />
                               </div>
                               <div className="mt-2 truncate text-xs font-medium">{p.name}</div>
-                              {active && <Check className="absolute right-1.5 top-1.5 h-4 w-4 text-accent" />}
+                              {active && <Check className="absolute right-1.5 top-1.5 h-4 w-4 text-gold" />}
                             </button>
                           );
                         })}
@@ -508,7 +514,7 @@ function CreatePage() {
                               key={m}
                               type="button"
                               onClick={() => setQr((q) => ({ ...q, mode: m }))}
-                              className={cn("rounded-lg border-2 p-3 text-left transition-all hover:-translate-y-0.5", qr.mode === m ? "border-accent" : "border-border")}
+                              className={cn("rounded-lg border-2 p-3 text-left transition-all hover:-translate-y-0.5", qr.mode === m ? "border-gold" : "border-border")}
                             >
                               <div className="text-sm font-semibold">{m === "info" ? "Assignment info" : "Custom URL"}</div>
                               <div className="mt-1 text-xs text-muted-foreground">
@@ -555,7 +561,7 @@ function CreatePage() {
                     {!requiredReady && (
                       <div className="absolute inset-0 z-10 grid place-items-center bg-white/70 p-6 text-center backdrop-blur-sm dark:bg-black/40">
                         <div>
-                          <Sparkles className="mx-auto h-6 w-6 text-accent" />
+                          <Sparkles className="mx-auto h-6 w-6 text-gold" />
                           <p className="mt-2 max-w-xs text-sm text-muted-foreground">{t("preview.unlock")}</p>
                         </div>
                       </div>

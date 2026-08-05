@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /auth
+Disallow: /settings
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /admin
+
+Sitemap: https://coververse.lovable.app/sitemap.xml

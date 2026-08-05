@@ -25,12 +25,28 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "CoverCraft — Assignment Cover Page Maker" },
+      { title: "CoverVerse — Assignment Cover Page Maker" },
       { name: "description", content: "Design assignment cover pages from 500+ templates with AI artwork, live preview and one-click PDF or PNG download." },
-      { property: "og:title", content: "CoverCraft — Assignment Cover Page Maker" },
+      { property: "og:title", content: "CoverVerse — Assignment Cover Page Maker" },
       { property: "og:description", content: "500+ templates, AI cover artwork, live preview and print-ready PDF or PNG exports." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:url", content: "https://coververse.lovable.app/" },
+    ],
+    links: [{ rel: "canonical", href: "https://coververse.lovable.app/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          name: "CoverVerse",
+          url: "https://coververse.lovable.app/",
+          applicationCategory: "EducationalApplication",
+          description:
+            "Design assignment cover pages from 500+ templates with AI artwork, live preview and one-click PDF or PNG download.",
+        }),
+      },
     ],
   }),
   component: Landing,
@@ -69,7 +85,7 @@ function Landing() {
             <div className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-hero text-white shadow-glow">
               <GraduationCap className="h-5 w-5" />
             </div>
-            <span className="font-serif text-xl font-bold tracking-tight">CoverCraft</span>
+            <span className="font-serif text-xl font-bold tracking-tight">CoverVerse</span>
           </Link>
           <div className="flex items-center gap-2">
             <LanguageSelector />
@@ -91,11 +107,11 @@ function Landing() {
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-gradient-subtle" />
-        <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-accent/20 blur-3xl" />
+        <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-gold/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-40 -right-32 h-96 w-96 rounded-full bg-primary/20 blur-3xl" />
         <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-4 py-16 md:grid-cols-2 md:py-24">
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-medium text-accent-foreground">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs font-medium text-gold-foreground">
               <Sparkles className="h-3.5 w-3.5" /> New · 500+ designer templates
             </span>
             <h1 className="mt-5 font-serif text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
@@ -109,7 +125,7 @@ function Landing() {
                 <Link to="/create">Create your cover <ArrowRight className="ml-1.5 h-4 w-4" /></Link>
               </Button>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <ShieldCheck className="h-4 w-4 text-accent" /> Print-ready A4 · No watermarks
+                <ShieldCheck className="h-4 w-4 text-gold" /> Print-ready A4 · No watermarks
               </div>
             </div>
           </div>
@@ -174,7 +190,7 @@ function Landing() {
       {/* CTA */}
       <section className="mx-auto max-w-6xl px-4 py-20">
         <div className="overflow-hidden rounded-3xl bg-gradient-hero p-10 text-center text-white shadow-elegant sm:p-16">
-          <Zap className="mx-auto h-10 w-10 text-accent" />
+          <Zap className="mx-auto h-10 w-10 text-gold" />
           <h2 className="mt-4 font-serif text-3xl font-bold sm:text-4xl">Your next cover page is 60 seconds away.</h2>
           <p className="mx-auto mt-3 max-w-xl text-white/85">Fill in your details, pick a template, and download. That's it.</p>
           <Button asChild size="lg" variant="secondary" className="mt-8 shadow-glow">
@@ -184,7 +200,7 @@ function Landing() {
       </section>
 
       <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground">
-        Made with care · CoverCraft © {new Date().getFullYear()}
+        Made with care · CoverVerse © {new Date().getFullYear()}
       </footer>
     </div>
   );
