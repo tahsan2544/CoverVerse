@@ -1,12 +1,37 @@
+<div align="center">
+
 # CoverVerse
 
 > Create professional assignment cover pages in seconds.
+
+[![Live app](https://img.shields.io/badge/live_app-coververse.lovable.app-2563eb)](https://coververse.lovable.app)
+[![License: MIT](https://img.shields.io/badge/license-MIT-2e7d32.svg)](./LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React 19](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)](https://vite.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+
+</div>
 
 CoverVerse is a modern web app that helps students design beautiful, print-ready
 assignment cover pages. Pick from 500+ templates, fill in your details, watch the
 live preview update, and download a high-quality PDF or PNG.
 
 **Live app:** https://coververse.lovable.app
+
+## Contents
+
+- [Features](#features)
+- [Cover fields](#cover-fields)
+- [How to use](#how-to-use)
+- [Tech stack](#tech-stack)
+- [Local setup](#local-setup)
+- [Accounts & roles](#accounts--roles)
+- [Deployment](#deployment)
+- [Privacy](#privacy)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Features
 
@@ -46,7 +71,7 @@ across devices.
 ## Tech stack
 
 - TanStack Start (React 19) + TanStack Router
-- Vite 7
+- Vite 8
 - Tailwind CSS v4 + shadcn/ui
 - TanStack Query
 - Lovable Cloud (Postgres, auth, storage, server functions)
@@ -58,8 +83,8 @@ Requirements: [Bun](https://bun.sh) (or Node 20+) and a Lovable Cloud / Supabase
 backend for auth and admin features.
 
 ```bash
-git clone <your-repo-url>
-cd coververse
+git clone https://github.com/tahsan2544/CoverVerse.git
+cd CoverVerse
 bun install
 bun run dev          # http://localhost:8080
 ```
@@ -114,7 +139,7 @@ Issues, ideas and pull requests are welcome.
 
 ## License
 
-MIT
+MIT — see [LICENSE](./LICENSE) for details.
 
 ---
 
